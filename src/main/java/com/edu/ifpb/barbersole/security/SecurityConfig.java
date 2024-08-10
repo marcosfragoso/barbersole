@@ -18,6 +18,8 @@ import org.springframework.security.web.authentication.session.RegisterSessionAu
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
@@ -28,9 +30,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // Implementar
+        http.authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers(
+                        "/webjars/**",
+                        "/css/**",
+                        "/images/**",
+                        "/js/**"
+                ).permitAll()
+                .requestMatchers("/index").permitAll()
+                .requestMatchers("/register").permitAll()
+                .requestMatchers("/login").permitAll()
+        );
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

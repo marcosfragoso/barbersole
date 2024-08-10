@@ -2,8 +2,10 @@ package com.edu.ifpb.barbersole.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -28,6 +30,14 @@ public class Usuario {
 
     @Column(name = "status")
     private String status;
+
+    @Past
+    @Column(name = "data_nasc")
+    private LocalDate dataNasc;
+
+
+    @Column(name = "data_cad")
+    private LocalDate dataCad;
 
     @ManyToMany
     @JoinTable(
