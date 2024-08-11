@@ -12,7 +12,7 @@
             href=" https://cdn.jsdelivr.net/npm/open-iconic@1.1.1/font/css/open-iconic-bootstrap.min.css "
             rel="stylesheet ">
     <link href="floating-labels.css" rel="stylesheet">
-
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
     <title>BarberSole App | Login</title>
 </head>
 <body>
@@ -26,10 +26,10 @@
                     <div class="card shadow-lg border-0">
                         <div class="card-body p-5">
                             <h1 class="fs-4 card-title fw-bold mb-4 text-center">Login</h1>
-                            <form method="POST" class="needs-validation" novalidate="" autocomplete="off">
+                            <form th:action="@{/login}" method="POST" class="needs-validation" novalidate="" autocomplete="off">
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="email">E-mail</label>
-                                    <input id="email" type="email" class="form-control" name="email" value="" required autofocus>
+                                    <label class="mb-2 text-muted" for="username">E-mail</label>
+                                    <input id="username" type="email" class="form-control" name="username" value="" required autofocus>
                                     <div class="invalid-feedback">
                                         Email inválido
                                     </div>

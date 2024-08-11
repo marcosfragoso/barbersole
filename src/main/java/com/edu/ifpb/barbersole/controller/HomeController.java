@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-    @GetMapping({"/index"})
+    @GetMapping({"/"})
     public String index(HttpServletResponse response) {
         return "index";
     }
@@ -20,5 +20,10 @@ public class HomeController {
     @GetMapping({"/login"})
     public String login(HttpServletResponse response) {
         return "login";
+    }
+
+    @GetMapping({"/home"})
+    public String home(HttpServletResponse response) {
+        return "home";
     }
 }

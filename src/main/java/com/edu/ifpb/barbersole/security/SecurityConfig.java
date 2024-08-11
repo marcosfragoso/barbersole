@@ -37,9 +37,29 @@ public class SecurityConfig {
                         "/images/**",
                         "/js/**"
                 ).permitAll()
-                .requestMatchers("/index").permitAll()
+                .requestMatchers("/").permitAll()
                 .requestMatchers("/register").permitAll()
-                .requestMatchers("/login").permitAll()
+                .requestMatchers("/home/**").authenticated()
+
+        ).formLogin((formLogin) -> formLogin
+                .loginPage("/login")
+                .defaultSuccessUrl("/home", true)
+                .permitAll()
+        ).logout((logout) -> logout
+                .logoutSuccessUrl("/login")
+                .deleteCookies("JSESSIONID")
+        ).exceptionHandling(exception -> exception
+                .accessDeniedPage("/login")
+        ).sessionManagement((session) -> session
+                .maximumSessions(1)
+                .expiredUrl("/login?expired=true")
+                .sessionRegistry(sessionRegistry())
+        ).sessionManagement(session -> session
+                .invalidSessionUrl("/login?expired=true")
+        ).sessionManagement((session) -> session
+                .sessionFixation()
+                .newSession()
+                .sessionAuthenticationStrategy(sessionAuthStrategy())
         );
         return http.build();
     }
