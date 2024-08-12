@@ -44,6 +44,7 @@ public class SecurityConfig {
         ).formLogin((formLogin) -> formLogin
                 .loginPage("/login")
                 .defaultSuccessUrl("/home", true)
+                .failureUrl("/login-error")
                 .permitAll()
         ).logout((logout) -> logout
                 .logoutSuccessUrl("/login")
@@ -52,10 +53,10 @@ public class SecurityConfig {
                 .accessDeniedPage("/login")
         ).sessionManagement((session) -> session
                 .maximumSessions(1)
-                .expiredUrl("/login?expired=true")
+                .expiredUrl("/expired")
                 .sessionRegistry(sessionRegistry())
         ).sessionManagement(session -> session
-                .invalidSessionUrl("/login?expired=true")
+                .invalidSessionUrl("/expired")
         ).sessionManagement((session) -> session
                 .sessionFixation()
                 .newSession()

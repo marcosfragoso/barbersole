@@ -28,10 +28,6 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = buscaPorUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário inexistente!"));
 
-        usuario.getPerfis().size();
-        System.out.println("Usuário encontrado: " + usuario.getUsername());
-        System.out.println("Usuário encontrado: " + usuario.getSenha());
-
         User userSpring = new User(
                 usuario.getUsername(),
                 usuario.getSenha(),

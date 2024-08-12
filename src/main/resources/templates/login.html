@@ -27,14 +27,15 @@
                         <img class="mb-4" th:src="@{/images/logo.png}" alt="" width="100">
                     </div>
                     <div class="card shadow-lg border-0">
+
                         <div class="card-body p-5">
                             <h1 class="fs-4 card-title fw-bold mb-4 text-center">Login</h1>
-                            <form th:action="@{/login}" method="POST" class="needs-validation" novalidate="" autocomplete="off">
+                            <form th:action="@{/login}" method="POST" class="form-signin was-validated">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="username">E-mail</label>
                                     <input id="username" type="email" class="form-control" name="username" value="" required autofocus>
                                     <div class="invalid-feedback">
-                                        Email inválido
+                                        Email inválido, use seu e-mail cadastrado como login.
                                     </div>
                                 </div>
 
@@ -44,7 +45,7 @@
                                     </div>
                                     <input id="password" type="password" class="form-control" name="password" required>
                                     <div class="invalid-feedback">
-                                        Digite sua senha
+                                        Digite sua senha.
                                     </div>
                                 </div>
 
@@ -54,6 +55,16 @@
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                        <div class="pt-2 pb-2" th:if="${alerta != null}"
+                             th:class="${alerta == 'erro'} ? 'alert alert-danger' : 'alert alert-success'"
+                             role="alert">
+                            <h4 th:text="${titulo}" class="alert-heading">Credenciais...</h4>
+                            <p th:text="${texto}">Login ou senha incorretos...</p>
+                            <hr>
+                            <p class="mb-0">
+                                <small th:text="${subtexto}">Acesso permitido...</small>
+                            </p>
                         </div>
                         <div class="card-footer py-3 border-0 bg-dark text-white">
                             <div class="text-center">
