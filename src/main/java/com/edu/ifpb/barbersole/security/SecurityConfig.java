@@ -39,6 +39,7 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/register").permitAll()
+                .requestMatchers("/cadastrar").permitAll()
                 .requestMatchers("/home/**").authenticated()
 
         ).formLogin((formLogin) -> formLogin

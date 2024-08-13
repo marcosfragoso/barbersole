@@ -35,7 +35,7 @@ public class Usuario {
     @Column(name = "status")
     private String status;
 
-    @Past
+    @Past(message = "Data inválida. Deve ser uma data no passado.")
     @Column(name = "data_nasc")
     private LocalDate dataNasc;
 

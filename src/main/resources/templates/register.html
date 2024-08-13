@@ -28,7 +28,19 @@
                     <div class="card shadow-lg border-0">
                         <div class="card-body p-5">
                             <h1 class="fs-4 card-title fw-bold mb-4 text-center">Registre-se</h1>
-                            <form method="POST" class="needs-validation" novalidate="" autocomplete="off">
+                            <form th:action="@{/cadastrar}" th:object="${usuario}" method="POST">
+
+                                <div th:if="${#fields.hasAnyErrors()}">
+                                    <div class="alert alert-danger alert-dismissible fade show"
+                                         role="alert">
+                                        <div th:each="error : ${#fields.detailedErrors()}">
+                                            <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted">Tipo de Usuário</label>
                                     <div>
@@ -48,32 +60,26 @@
 
 
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="name">Nome</label>
-                                    <input id="name" type="text" class="form-control" name="name" value="" required autofocus>
+                                    <label class="mb-2 text-muted" for="nome">Nome</label>
+                                    <input id="nome" type="text" class="form-control" name="nome" value="" required autofocus th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
                                     <div class="invalid-feedback">
                                         O nome é obrigatório
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="email">E-mail</label>
-                                    <input id="email" type="email" class="form-control" name="email" value="" required>
-                                    <div class="invalid-feedback">
-                                        Email inválido
-                                    </div>
+                                    <label class="mb-2 text-muted" for="username">E-mail</label>
+                                    <input id="username" type="email" class="form-control" name="username" value="" required th:field="*{username}" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="data_nasc">Data de nascimento</label>
-                                    <input id="data_nasc" type="date" class="form-control" name="data_nasc" value="" required>
+                                    <input id="data_nasc" type="date" class="form-control" name="data_nasc" value="" required th:field="*{dataNasc}" th:classappend="${#fields.hasErrors('dataNasc')} ? 'is-invalid'">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="password">Password</label>
-                                    <input id="password" type="password" class="form-control" name="password" required>
-                                    <div class="invalid-feedback">
-                                        A senha é obrigatória
-                                    </div>
+                                    <label class="mb-2 text-muted" for="senha">Password</label>
+                                    <input id="senha" type="password" class="form-control" name="senha" required th:field="*{senha}" th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'">
                                 </div>
 
 
@@ -90,6 +96,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <div th:if="${sucesso} != null">
+                        <div class="alert alert-success" role="alert">
+                            <i class="oi oi-check"></i> <span> <strong
+                                th:text="${sucesso}"></strong>
+                        </span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                    </div>
+
                     <div class="text-center mt-5 mb-5 text-muted">
                         Copyright &copy; 2024 &mdash; BarberSole App
                     </div>

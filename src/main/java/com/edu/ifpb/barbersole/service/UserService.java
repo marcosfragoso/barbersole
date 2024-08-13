@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +53,7 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = false)
     public void salvarUsuario(Usuario usuario) {
         String crypt = new BCryptPasswordEncoder().encode(usuario.getSenha());
+        usuario.setDataCad(LocalDate.now());
         usuario.setSenha(crypt);
         usuarioRepository.save(usuario);
     }
