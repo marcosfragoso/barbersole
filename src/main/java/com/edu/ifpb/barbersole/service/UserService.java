@@ -2,8 +2,10 @@ package com.edu.ifpb.barbersole.service;
 
 import com.edu.ifpb.barbersole.model.Perfil;
 import com.edu.ifpb.barbersole.model.Usuario;
+import com.edu.ifpb.barbersole.repository.PerfilRepository;
 import com.edu.ifpb.barbersole.repository.UsuarioRepository;
 
+import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +26,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PerfilRepository perfilRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -55,6 +61,11 @@ public class UserService implements UserDetailsService {
         String crypt = new BCryptPasswordEncoder().encode(usuario.getSenha());
         usuario.setDataCad(LocalDate.now());
         usuario.setSenha(crypt);
+        usuario.setPerfis(perfilRepository.findAllById(2L));
+        usuario.setStatus("Ativo");
+        if (usuarioRepository.findByUsername(usuario.getUsername()).isPresent()) {
+            throw new EntityExistsException();
+        }
         usuarioRepository.save(usuario);
     }
 }

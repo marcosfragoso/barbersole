@@ -39,7 +39,7 @@ public class HomeController {
         }
         userService.salvarUsuario(usuario);
         attr.addFlashAttribute("sucesso", "Usuário registrado com sucesso!");
-        return "redirect:/login";
+        return "redirect:/register";
     }
 
     @GetMapping({"/login"})
@@ -56,6 +56,7 @@ public class HomeController {
     public String loginError(ModelMap model, HttpServletRequest resp) {
         HttpSession session = resp.getSession();
         String lastException = String.valueOf(session.getAttribute("SPRING_SECURITY_LAST_EXCEPTION"));
+
         if (lastException.contains(SessionAuthenticationException.class.getName())) {
             model.addAttribute("alerta", "erro");
             model.addAttribute("titulo", "Acesso recusado!");

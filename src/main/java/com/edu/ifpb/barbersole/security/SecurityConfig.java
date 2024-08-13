@@ -27,6 +27,7 @@ public class SecurityConfig {
 
     private static final String BARBEIRO = PerfilTipo.BARBEIRO.getDesc();
     private static final String CLIENTE = PerfilTipo.CLIENTE.getDesc();
+    private static final String ADMIN = PerfilTipo.ADMIN.getDesc();
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

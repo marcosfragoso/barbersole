@@ -28,7 +28,18 @@
                     <div class="card shadow-lg border-0">
                         <div class="card-body p-5">
                             <h1 class="fs-4 card-title fw-bold mb-4 text-center">Registre-se</h1>
+                            <div th:if="${error}">
+                                <div class="alert alert-danger alert-dismissible fade show"
+                                     role="alert">
+                                    <div>
+                                        <i class="oi oi-warning"></i> <span th:text="${error}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
                             <form th:action="@{/cadastrar}" th:object="${usuario}" method="POST">
+
+
 
                                 <div th:if="${#fields.hasAnyErrors()}">
                                     <div class="alert alert-danger alert-dismissible fade show"
@@ -38,23 +49,6 @@
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                 aria-label="Close"></button>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="mb-2 text-muted">Tipo de Usuário</label>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="userType" id="barbeiro" value="barbeiro" required>
-                                            <label class="form-check-label" for="barbeiro">Barbeiro</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="userType" id="cliente" value="cliente" required>
-                                            <label class="form-check-label" for="cliente">Cliente</label>
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            Por favor, selecione o tipo de usuário.
-                                        </div>
                                     </div>
                                 </div>
 
@@ -73,12 +67,17 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="telefone">Telefone</label>
+                                    <input id="telefone" type="tel" class="form-control" name="telefone" value="" required th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'">
+                                </div>
+
+                                <div class="mb-3">
                                     <label class="mb-2 text-muted" for="data_nasc">Data de nascimento</label>
                                     <input id="data_nasc" type="date" class="form-control" name="data_nasc" value="" required th:field="*{dataNasc}" th:classappend="${#fields.hasErrors('dataNasc')} ? 'is-invalid'">
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="senha">Password</label>
+                                    <label class="mb-2 text-muted" for="senha">Senha</label>
                                     <input id="senha" type="password" class="form-control" name="senha" required th:field="*{senha}" th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'">
                                 </div>
 

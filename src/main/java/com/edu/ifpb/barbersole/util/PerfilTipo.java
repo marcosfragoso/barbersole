@@ -1,7 +1,7 @@
 package com.edu.ifpb.barbersole.util;
 
 public enum PerfilTipo {
-    BARBEIRO(1, "BARBEIRO"), CLIENTE(2, "CLIENTE");
+    BARBEIRO(1, "BARBEIRO"), CLIENTE(2, "CLIENTE"), ADMIN(3, "ADMIN");
 
     private long cod;
     private String desc;

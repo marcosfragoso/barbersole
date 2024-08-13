@@ -28,7 +28,9 @@ public class Usuario {
     @Column(name = "nome")
     private String nome;
 
-    @Size(min = 6, max = 16, message = "A senha deve ter no mínimo {min} caracteres e no máximo {max} caracteres.")
+    @Column(name = "telefone")
+    private String telefone;
+
     @Column(name = "senha_hash")
     private String senha;
 

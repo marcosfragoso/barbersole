@@ -2,6 +2,7 @@ CREATE TABLE usuario (
     id BIGINT,
     username VARCHAR(60) NOT NULL,
     nome VARCHAR(60) NOT NULL,
+    telefone VARCHAR(30) NOT NULL,
     senha_hash VARCHAR(512) NOT NULL,
     status VARCHAR(30),
     data_nasc DATE,

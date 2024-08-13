@@ -3,6 +3,8 @@ INSERT INTO usuario VALUES (2,'cliente@gmail.com', 'Cliente', '$2a$10$Ckqz5CKBEM
 
 insert into perfil values(1, 'BARBEIRO');
 insert into perfil values(2, 'CLIENTE');
+insert into perfil values(3, 'ADMIN');
+
 
 INSERT INTO usuario_perfil VALUES (1, 1);
 INSERT INTO usuario_perfil VALUES (2, 2);
