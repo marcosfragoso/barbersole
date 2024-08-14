@@ -2,6 +2,7 @@ package com.edu.ifpb.barbersole.controller;
 
 import com.edu.ifpb.barbersole.model.Usuario;
 import com.edu.ifpb.barbersole.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,5 +42,12 @@ public class UsuarioController {
         userService.atualizarUsuario(usuario);
         attr.addFlashAttribute("sucesso", "Dados alterados com sucesso!");
         return "redirect:/usuarios/editar";
+    }
+
+    @GetMapping("/excluir")
+    public String excluir(@AuthenticationPrincipal User user, HttpSession session) {
+        userService.deletarUsuario(user.getUsername());
+        session.invalidate();
+        return "redirect:/login";
     }
 }

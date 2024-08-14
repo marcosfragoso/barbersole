@@ -7,6 +7,7 @@ import com.edu.ifpb.barbersole.repository.UsuarioRepository;
 
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,6 +35,10 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = buscaPorUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário inexistente!"));
+
+        if (!usuario.getStatus().equals("Ativo")) {
+            throw new DisabledException("Usuário inativo!");
+        }
 
         User userSpring = new User(
                 usuario.getUsername(),
@@ -83,6 +88,16 @@ public class UserService implements UserDetailsService {
             usuarioRepository.save(usuarioExiste);
         } else {
             throw new UsernameNotFoundException("Usuário não encontrado");
+        }
+    }
+
+    public void deletarUsuario(String username) {
+        Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
+
+        if (usuario.isPresent()) {
+            Usuario u = usuario.get();
+            u.setStatus("Inativo");
+            usuarioRepository.save(u);
         }
     }
 }

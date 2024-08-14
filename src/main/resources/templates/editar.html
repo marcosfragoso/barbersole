@@ -95,61 +95,86 @@
                         </div>
                     </div>
                 </div>
+                <div class="shadow-lg p-4">
+                    <form class="pb-3" th:object="${usuario}" method="post" th:action="@{/usuarios/editar}">
 
-                <form class="shadow-lg p-4" th:object="${usuario}" method="post" th:action="@{/usuarios/editar}">
-
-                    <div th:if="${#fields.hasAnyErrors()}">
-                        <div class="alert alert-danger alert-dismissible fade show"
-                             role="alert">
-                            <div th:each="error : ${#fields.detailedErrors()}">
-                                <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="username" class="col-sm-2 col-form-label text-muted">E-mail</label>
-                        <div class="col-sm-6">
-                            <span class="form-control bg-light" id="username" th:text="*{username}" aria-readonly="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="nome" class="col-sm-2 col-form-label text-muted">Nome</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="nome" placeholder="Nome" autofocus="autofocus" th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" />
-                            <div class="invalid-feedback">
-                                O nome é obrigatório
+                        <div th:if="${#fields.hasAnyErrors()}">
+                            <div class="alert alert-danger alert-dismissible fade show"
+                                 role="alert">
+                                <div th:each="error : ${#fields.detailedErrors()}">
+                                    <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="telefone" class="col-sm-2 col-form-label text-muted">Telefone</label>
-                        <div class="col-sm-6">
-                            <input type="tel" class="form-control" id="telefone" placeholder="Telefone" autofocus="autofocus" th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'" />
+
+                        <div class="form-group row">
+                            <label for="username" class="col-sm-2 col-form-label text-muted">E-mail</label>
+                            <div class="col-sm-6">
+                                <span class="form-control bg-light" id="username" th:text="*{username}" aria-readonly="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nome" class="col-sm-2 col-form-label text-muted">Nome</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="nome" placeholder="Nome" autofocus="autofocus" th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" />
+                                <div class="invalid-feedback">
+                                    O nome é obrigatório
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="telefone" class="col-sm-2 col-form-label text-muted">Telefone</label>
+                            <div class="col-sm-6">
+                                <input type="tel" class="form-control" id="telefone" placeholder="Telefone" autofocus="autofocus" th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="data_nasc" class="col-sm-2 col-form-label text-muted">Data de nascimento</label>
+                            <div class="col-sm-6">
+                                <span class="form-control bg-light" id="data_nasc" th:text="*{dataNasc}" aria-readonly="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="data_cad" class="col-sm-2 col-form-label text-muted">Data de cadastro</label>
+                            <div class="col-sm-6">
+                                <span class="form-control bg-light" id="data_cad" th:text="*{dataCad}" aria-readonly="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="status" class="col-sm-2 col-form-label text-muted">Status</label>
+                            <div class="col-sm-6">
+                                <span class="form-control bg-light" id="status" th:text="*{status}" aria-readonly="true"></span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-1 ">Salvar</button>
+
+                    </form>
+
+                    <button th:id="${'btn_usuarios/excluir'}" type="button" class="pt-2 btn btn-danger btn"
+                            data-bs-toggle="modal" data-bs-target="#myModal">
+                        <span title="Exclusão desabilitada" aria-hidden="true">Excluir conta</span>
+                    </button>
+                </div>
+
+
+                <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Atenção</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Tem certeza que deseja excluir?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="data_nasc" class="col-sm-2 col-form-label text-muted">Data de nascimento</label>
-                        <div class="col-sm-6">
-                            <span class="form-control bg-light" id="data_nasc" th:text="*{dataNasc}" aria-readonly="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="data_cad" class="col-sm-2 col-form-label text-muted">Data de cadastro</label>
-                        <div class="col-sm-6">
-                            <span class="form-control bg-light" id="data_cad" th:text="*{dataCad}" aria-readonly="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="status" class="col-sm-2 col-form-label text-muted">Status</label>
-                        <div class="col-sm-6">
-                            <span class="form-control bg-light" id="status" th:text="*{status}" aria-readonly="true"></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-1 ">Salvar</button>
-                </form>
+                </div>
             </div>
         </section>
     </div>
