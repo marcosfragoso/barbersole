@@ -72,4 +72,17 @@ public class UserService implements UserDetailsService {
     public Optional<Usuario> findByUsername(String username) {
         return usuarioRepository.findByUsername(username);
     }
+
+    public void atualizarUsuario(Usuario usuario) {
+        Optional<Usuario> u = usuarioRepository.findByUsername(usuario.getUsername());
+
+        if (u.isPresent()) {
+            Usuario usuarioExiste = u.get();
+            usuarioExiste.setTelefone(usuario.getTelefone());
+            usuarioExiste.setNome(usuario.getNome());
+            usuarioRepository.save(usuarioExiste);
+        } else {
+            throw new UsernameNotFoundException("Usuário não encontrado");
+        }
+    }
 }

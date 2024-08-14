@@ -1,10 +1,7 @@
 package com.edu.ifpb.barbersole.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -25,6 +22,7 @@ public class Usuario {
     private String username;
 
     @NotNull(message = "O nome é obrigatório.")
+    @NotBlank(message = "O nome não pode ser vazio.")
     @Column(name = "nome")
     private String nome;
 
