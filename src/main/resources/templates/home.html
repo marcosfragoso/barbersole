@@ -30,13 +30,13 @@
                     </button>
 
                     <a href="/home" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-                        <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="" width="40" height="32">
+                        <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
                     </a>
 
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
                         <li>
                             <div class="btn bg-dark text-white">
-                                <i class="bi bi-person-square px-2"></i><span sec:authentication="name"></span>
+                                <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
                             </div>
                         </li>
 
@@ -75,8 +75,35 @@
                 </ul>
             </nav>
         </aside>
-        <section>
-
+        <section class="layout-content">
+                <div class="row m-0">
+                    <div class="col-9">
+                        <div class="row">
+                            <h3 class="pt-3 pb-3 fw-bold h1-title">Agende aqui o seu serviço</h3>
+                            <div>
+                                listagem de todos os barbeiros cadastrados (card com dados do barbeiro + botão de agendar)
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <h3 class="pt-3 pb-3 fw-bold h1-title">Meus agendamentos</h3>
+                            <div>
+                                foreach nos agendamentos (detalhes do agendamento) do usuário logado na sessão
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3 bg-light">
+                        <div class="row">
+                            Mapa da localização
+                        </div>
+                        <div class="row">
+                            Detalhes da localização
+                        </div>
+                        <div class="row">
+                            Contato
+                        </div>
+                    </div>
+                </div>
         </section>
     </div>
 

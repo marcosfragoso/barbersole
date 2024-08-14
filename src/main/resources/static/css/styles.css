@@ -152,28 +152,6 @@ body {
  */
 
 
-footer {
-    border-top: 1px solid #CCC;
-    height: 50px;
-    padding: 10px;
-}
-
-footer i {
-    font-size: 20px;
-}
-
-#social-icons-container {
-    padding: 25px;
-}
-
-#social-icons-container div {
-    text-align: center;
-}
-
-footer p {
-    text-align: center;
-    margin: 10px;
-}
 
 a:hover i {
     color: #c1b696;
@@ -203,5 +181,9 @@ a:hover i {
 
 label {
   margin-bottom: 0.5rem;
+}
+
+.h1-title {
+    color: rgba(33, 37, 41, 1);
 }
 
