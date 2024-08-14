@@ -42,7 +42,8 @@ public class SecurityConfig {
                 .requestMatchers("/register").permitAll()
                 .requestMatchers("/cadastrar").permitAll()
                 .requestMatchers("/home/**").authenticated()
-
+                .requestMatchers(antMatcher("/perfil/**")).hasAnyAuthority(CLIENTE)
+                .anyRequest().authenticated()
         ).formLogin((formLogin) -> formLogin
                 .loginPage("/login")
                 .defaultSuccessUrl("/home", true)
