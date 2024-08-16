@@ -100,4 +100,12 @@ public class UserService implements UserDetailsService {
             usuarioRepository.save(u);
         }
     }
+
+    public void atualizarSenha(Usuario usuario, String novaSenha) {
+
+        String crypt = new BCryptPasswordEncoder().encode(novaSenha);
+        usuario.setSenha(crypt);
+        usuarioRepository.save(usuario);
+    }
+
 }

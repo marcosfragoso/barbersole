@@ -1,6 +1,9 @@
 package com.edu.ifpb.barbersole.controller;
 
+import com.edu.ifpb.barbersole.model.Token;
 import com.edu.ifpb.barbersole.model.Usuario;
+import com.edu.ifpb.barbersole.service.EmailService;
+import com.edu.ifpb.barbersole.service.TokenService;
 import com.edu.ifpb.barbersole.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,13 +16,22 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @Controller
 public class HomeController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @GetMapping({"/"})
     public String index(HttpServletResponse response) {
@@ -78,4 +90,62 @@ public class HomeController {
         model.addAttribute("subtexto", "Você logou em outro dispositivo.");
         return "login";
     }
+
+    @GetMapping({"/remember"})
+    public String remember(HttpServletResponse response) {
+        return "remember";
+    }
+
+    @PostMapping("/sendEmail")
+    public String sendEmail(@RequestParam("username") String email, RedirectAttributes redirectAttributes) {
+        Usuario usuario = userService.findByUsername(email).orElse(null);
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Usuário não encontrado.");
+            return "redirect:/remember";
+        }
+
+        Token token = tokenService.gerarToken(usuario);
+        String subject = "Recuperação de Senha - BarberSole App";
+        String message = "Olá,\n\nVocê solicitou a recuperação de sua senha. " +
+                "Por favor, clique no link abaixo para redefinir sua senha:\n\n" +
+                "http://localhost:8080/reset?token=" + token.getToken() + "\n\n" +
+                "Se você não fez essa solicitação, por favor ignore este e-mail.";
+
+        try {
+            emailService.enviarEmail(email, subject, message);
+            redirectAttributes.addFlashAttribute("success", "E-mail de recuperação enviado com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Falha ao enviar o e-mail. Tente novamente.");
+        }
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/reset")
+    public String showResetForm(@RequestParam("token") String token, ModelMap model) {
+        Optional<Token> optionalToken = tokenService.validarToken(token);
+        if (optionalToken.isEmpty()) {
+            model.addAttribute("erro", "Token inválido ou expirado!");
+            return "remember";
+        }
+        model.addAttribute("token", token);
+        return "reset";
+    }
+
+    @PostMapping("/resetPassword")
+    public String resetPassword(@RequestParam("token") String token, @RequestParam("password") String password, RedirectAttributes attr) {
+
+        Optional<Token> optionalToken = tokenService.validarToken(token);
+
+        if (optionalToken.isEmpty()) {
+            attr.addFlashAttribute("erro", "Token inválido ou expirado!");
+            return "redirect:/remember";
+        }
+        Usuario usuario = optionalToken.get().getUsuario();
+        userService.atualizarSenha(usuario, password);
+        tokenService.invalidarToken(optionalToken.get()); // Invalidar o token após o uso
+        attr.addFlashAttribute("sucesso", "Senha alterada com sucesso!");
+        return "redirect:/login";
+    }
+
 }
