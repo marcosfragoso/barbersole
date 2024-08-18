@@ -85,8 +85,16 @@
                     <div class="col-9">
                         <div class="row">
                             <h3 class="pt-3 pb-3 fw-bold h1-title">Agende aqui o seu serviço</h3>
-                            <div>
-                                listagem de todos os barbeiros cadastrados (card com dados do barbeiro + botão de agendar)
+                            <div class="row">
+                                <div class="col-md-2 pt-2" th:each="b : ${barbeiros}">
+                                    <div class="card text-center align-items-center justify-content-center shadow-lg border-0 p-2" style="width: 12rem;">
+                                        <img th:src="@{/images/barbeiro.png}" alt="Imagem do barbeiro" width="80px" height="80px">
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${b.nome}">Nome do Barbeiro</h5>
+                                            <a href="#" class="btn btn-dark">Agendar</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <hr>

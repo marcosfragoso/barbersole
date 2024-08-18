@@ -121,4 +121,11 @@ public class UserService implements UserDetailsService {
         usuarioRepository.save(usuario);
     }
 
+    public List<Usuario> listarBarbeiros() {
+        Long idPerfilBarbeiro = 1L;
+        return usuarioRepository.findAllByPerfisId(idPerfilBarbeiro);
+    }
+
+
+
 }
