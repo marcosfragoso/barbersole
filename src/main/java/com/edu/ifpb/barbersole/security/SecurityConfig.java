@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .requestMatchers("/resetPassword").permitAll()
                 .requestMatchers("/home/**").authenticated()
                 .requestMatchers(antMatcher("/perfil/**")).hasAnyAuthority(CLIENTE)
+                .requestMatchers(antMatcher("/barbeiros/register/**")).hasAnyAuthority(ADMIN)
                 .anyRequest().authenticated()
         ).formLogin((formLogin) -> formLogin
                 .loginPage("/login")

@@ -72,6 +72,11 @@
                         <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
                         </a>
                     </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/register">
+                            <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>

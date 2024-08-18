@@ -74,6 +74,19 @@ public class UserService implements UserDetailsService {
         usuarioRepository.save(usuario);
     }
 
+    @Transactional(readOnly = false)
+    public void salvarBarbeiro(Usuario usuario) {
+        String crypt = new BCryptPasswordEncoder().encode(usuario.getSenha());
+        usuario.setDataCad(LocalDate.now());
+        usuario.setSenha(crypt);
+        usuario.setPerfis(perfilRepository.findAllById(1L));
+        usuario.setStatus("Ativo");
+        if (usuarioRepository.findByUsername(usuario.getUsername()).isPresent()) {
+            throw new EntityExistsException();
+        }
+        usuarioRepository.save(usuario);
+    }
+
     public Optional<Usuario> findByUsername(String username) {
         return usuarioRepository.findByUsername(username);
     }
