@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/barbeiros")
 public class BarbeiroController {
@@ -34,5 +36,12 @@ public class BarbeiroController {
         userService.salvarBarbeiro(usuario);
         attr.addFlashAttribute("sucesso", "Barbeiro registrado com sucesso!");
         return "redirect:/barbeiros/register";
+    }
+
+    @GetMapping("/barbeiroLista")
+    public String barbeiroLista(ModelMap model) {
+        List<Usuario> barbeiros = userService.listarBarbeiros();
+        model.addAttribute("barbeiros", barbeiros);
+        return "barbeiroLista";
     }
 }

@@ -77,6 +77,11 @@
                             <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
                         </a>
                     </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/barbeiroLista">
+                            <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </aside>

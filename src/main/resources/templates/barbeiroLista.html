@@ -16,7 +16,7 @@
             href=" https://cdn.jsdelivr.net/npm/open-iconic@1.1.1/font/css/open-iconic-bootstrap.min.css "
             rel="stylesheet ">
     <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
-    <title>BarberSole App | Registrar barbeiro</title>
+    <title>BarberSole App | Barbeiros</title>
 </head>
 <body>
 <header>
@@ -87,94 +87,40 @@
     </aside>
     <section class="layout-content">
         <div class="container">
-            <h3 class="pt-3 pb-3 fw-bold h1-title">Registrar barbeiro</h3>
-            <div class="py-2" th:if="${sucesso} != null">
-                <div class="alert alert-success" role="alert">
-                    <i class="oi oi-check"></i>
-                    <span>
-                                        <strong th:text="${sucesso}"></strong>
-                                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+            <h3 class="pt-3 pb-3 fw-bold h1-title">Barbeiros</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover table-sm">
+                    <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nome</th>
+                        <th>Status</th>
+                        <th>Data de cadastro</th>
+                        <th>Ação</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="b : ${barbeiros}">
+                        <td th:text="${b.id}"></td>
+                        <td th:text="${b.nome}"></td>
+                        <td th:text="${b.status}"></td>
+                        <td th:text="${b.dataCad}"></td>
+                        <td colspan="2"><a class="btn btn-warning btn-sm"
+                                           th:href="@{/usuarios/editar/{id}(id=${b.id})}"
+                                           role="button">
+                               <span class="oi oi-brush" title="Editar"
+                                     aria-hidden="true"></span>
+                        </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div th:if="${error}">
                 <div class="alert alert-danger alert-dismissible fade show"
                      role="alert">
                     <div>
                         <i class="oi oi-warning"></i> <span th:text="${error}"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="shadow-lg p-4">
-
-                <form th:action="@{/barbeiros/cadastrar}" th:object="${barbeiro}" method="POST">
-
-
-
-                    <div th:if="${#fields.hasAnyErrors()}">
-                        <div class="alert alert-danger alert-dismissible fade show"
-                             role="alert">
-                            <div th:each="error : ${#fields.detailedErrors()}">
-                                <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                        </div>
-                    </div>
-
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="nome">Nome</label>
-                        <input id="nome" type="text" class="form-control" name="nome" value="" required autofocus th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
-                        <div class="invalid-feedback">
-                            O nome é obrigatório
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="username">E-mail</label>
-                        <input id="username" type="email" class="form-control" name="username" value="" required th:field="*{username}" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="telefone">Telefone</label>
-                        <input id="telefone" type="tel" class="form-control" name="telefone" value="" required th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="data_nasc">Data de nascimento</label>
-                        <input id="data_nasc" type="date" class="form-control" name="data_nasc" value="" required th:field="*{dataNasc}" th:classappend="${#fields.hasErrors('dataNasc')} ? 'is-invalid'">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="senha">Senha</label>
-                        <input id="senha" type="password" class="form-control" name="senha" required th:field="*{senha}" th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'">
-                    </div>
-
-
-                    <div class="align-items-center d-flex">
-                        <button type="submit" class="btn btn-primary ms-auto">
-                            Registrar
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-
-
-            <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Atenção</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>Tem certeza que deseja excluir?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
-                        </div>
                     </div>
                 </div>
             </div>

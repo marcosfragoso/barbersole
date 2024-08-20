@@ -37,18 +37,23 @@
                                 <label class="mb-2 text-muted" for="password">Digite a nova senha</label>
                                 <input id="password" type="password" class="form-control" name="password" required>
                             </div>
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="codigo">Digite o código enviado pelo e-mail</label>
+                                <input id="codigo" type="text" class="form-control" name="codigo" required>
+                            </div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <button type="submit" class="btn btn-dark ms-0">
                                     Enviar
                                 </button>
                             </div>
                         </form>
+                        <br>
                         <div th:if="${success}" class="alert alert-success pt-3" role="alert">
                             <span th:text="${success}"></span>
                         </div>
 
-                        <div th:if="${error}" class="alert alert-danger pt-3" role="alert">
-                            <span th:text="${error}"></span>
+                        <div th:if="${codigoError}" class="alert alert-danger pt-3" role="alert">
+                            <span th:text="${codigoError}"></span>
                         </div>
                     </div>
                 </div>

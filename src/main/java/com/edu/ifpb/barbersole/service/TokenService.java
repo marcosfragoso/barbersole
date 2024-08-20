@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -22,6 +23,9 @@ public class TokenService {
     public Token gerarToken(Usuario usuario) {
         Token token = new Token();
         token.setToken(UUID.randomUUID().toString());
+        Random random = new Random();
+        int numero = 100000 + random.nextInt(900000);
+        token.setCodigo(Integer.toString(numero));
         token.setExpiryDate(LocalDateTime.now().plusHours(2));
         token.setUsuario(usuario);
         token.setValid(true);
@@ -36,5 +40,13 @@ public class TokenService {
     public void invalidarToken(Token token) {
         token.setValid(false);
         tokenRepository.save(token);
+    }
+
+    public boolean validarCodigo(String token, String codigo) {
+        Optional<Token> t = tokenRepository.findByToken(token);
+        if (t.isPresent()) {
+            if (t.get().getCodigo().equals(codigo)) return true;
+        }
+        return false;
     }
 }

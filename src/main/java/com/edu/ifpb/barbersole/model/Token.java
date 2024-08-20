@@ -21,6 +21,9 @@ public class Token {
     @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
+    @Column(name = "codigo", nullable = false)
+    private String codigo;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Usuario usuario;

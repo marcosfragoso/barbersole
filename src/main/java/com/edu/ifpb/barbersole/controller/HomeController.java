@@ -111,7 +111,7 @@ public class HomeController {
         Token token = tokenService.gerarToken(usuario);
         String subject = "Recuperação de Senha - BarberSole App";
         String message = "Olá,\n\nVocê solicitou a recuperação de sua senha. " +
-                "Por favor, clique no link abaixo para redefinir sua senha:\n\n" +
+                "Por favor, clique no link abaixo e digite o código: " + token.getCodigo() + " para redefinir sua senha:\n\n" +
                 "http://localhost:8080/reset?token=" + token.getToken() + "\n\n" +
                 "Se você não fez essa solicitação, por favor ignore este e-mail.";
 
@@ -137,7 +137,7 @@ public class HomeController {
     }
 
     @PostMapping("/resetPassword")
-    public String resetPassword(@RequestParam("token") String token, @RequestParam("password") String password, RedirectAttributes attr) {
+    public String resetPassword(@RequestParam("token") String token, @RequestParam("password") String password, @RequestParam("codigo") String codigo, RedirectAttributes attr) {
 
         Optional<Token> optionalToken = tokenService.validarToken(token);
 
@@ -146,10 +146,17 @@ public class HomeController {
             return "redirect:/remember";
         }
         Usuario usuario = optionalToken.get().getUsuario();
-        userService.atualizarSenha(usuario, password);
-        tokenService.invalidarToken(optionalToken.get()); // Invalidar o token após o uso
-        attr.addFlashAttribute("sucesso", "Senha alterada com sucesso!");
-        return "redirect:/login";
+        if (usuario.getId().equals(optionalToken.get().getUsuario().getId())) {
+            if (tokenService.validarCodigo(token, codigo)) {
+                userService.atualizarSenha(usuario, password);
+                tokenService.invalidarToken(optionalToken.get()); // Invalidar o token após o uso
+                attr.addFlashAttribute("sucesso", "Senha alterada com sucesso!");
+                return "sucesso";
+            } else {
+                attr.addFlashAttribute("codigoError", "O código digitado não confere.");
+            }
+        }
+        return "redirect:/reset?token=" + token;
     }
 
 }

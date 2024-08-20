@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .requestMatchers("/home/**").authenticated()
                 .requestMatchers(antMatcher("/perfil/**")).hasAnyAuthority(CLIENTE)
                 .requestMatchers(antMatcher("/barbeiros/register/**")).hasAnyAuthority(ADMIN)
+                .requestMatchers(antMatcher("/usuarios/editarBarbeiro/**")).hasAnyAuthority(ADMIN)
                 .anyRequest().authenticated()
         ).formLogin((formLogin) -> formLogin
                 .loginPage("/login")

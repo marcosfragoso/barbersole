@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -122,8 +121,11 @@ public class UserService implements UserDetailsService {
     }
 
     public List<Usuario> listarBarbeiros() {
-        Long idPerfilBarbeiro = 1L;
-        return usuarioRepository.findAllByPerfisId(idPerfilBarbeiro);
+        return usuarioRepository.findAllBarbers();
+    }
+
+    public Optional<Usuario> findById(Long id) {
+        return usuarioRepository.findById(id);
     }
 
 

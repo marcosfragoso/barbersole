@@ -16,7 +16,7 @@
             href=" https://cdn.jsdelivr.net/npm/open-iconic@1.1.1/font/css/open-iconic-bootstrap.min.css "
             rel="stylesheet ">
     <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
-    <title>BarberSole App | Registrar barbeiro</title>
+    <title>BarberSole App | Editar perfil</title>
 </head>
 <body>
 <header>
@@ -87,7 +87,7 @@
     </aside>
     <section class="layout-content">
         <div class="container">
-            <h3 class="pt-3 pb-3 fw-bold h1-title">Registrar barbeiro</h3>
+            <h3 class="pt-3 pb-3 fw-bold h1-title">Editar perfil</h3>
             <div class="py-2" th:if="${sucesso} != null">
                 <div class="alert alert-success" role="alert">
                     <i class="oi oi-check"></i>
@@ -106,10 +106,7 @@
                 </div>
             </div>
             <div class="shadow-lg p-4">
-
-                <form th:action="@{/barbeiros/cadastrar}" th:object="${barbeiro}" method="POST">
-
-
+                <form class="pb-3" th:object="${usuario}" method="post" th:action="@{/usuarios/editarBarbeiro}">
 
                     <div th:if="${#fields.hasAnyErrors()}">
                         <div class="alert alert-danger alert-dismissible fade show"
@@ -122,43 +119,53 @@
                         </div>
                     </div>
 
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="nome">Nome</label>
-                        <input id="nome" type="text" class="form-control" name="nome" value="" required autofocus th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
-                        <div class="invalid-feedback">
-                            O nome é obrigatório
+                    <div class="form-group row">
+                        <label for="username" class="col-sm-2 col-form-label text-muted">E-mail</label>
+                        <div class="col-sm-6">
+                            <input class="form-control bg-light" id="username" th:field="*{username}" aria-readonly="true"></input>
                         </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="username">E-mail</label>
-                        <input id="username" type="email" class="form-control" name="username" value="" required th:field="*{username}" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+                    <div class="form-group row">
+                        <label for="nome" class="col-sm-2 col-form-label text-muted">Nome</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="nome" placeholder="Nome" autofocus="autofocus" th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" />
+                            <div class="invalid-feedback">
+                                O nome é obrigatório
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="telefone">Telefone</label>
-                        <input id="telefone" type="tel" class="form-control" name="telefone" value="" required th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'">
+                    <div class="form-group row">
+                        <label for="telefone" class="col-sm-2 col-form-label text-muted">Telefone</label>
+                        <div class="col-sm-6">
+                            <input type="tel" class="form-control" id="telefone" placeholder="Telefone" autofocus="autofocus" th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'" />
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="data_nasc">Data de nascimento</label>
-                        <input id="data_nasc" type="date" class="form-control" name="data_nasc" value="" required th:field="*{dataNasc}" th:classappend="${#fields.hasErrors('dataNasc')} ? 'is-invalid'">
+                    <div class="form-group row">
+                        <label for="data_nasc" class="col-sm-2 col-form-label text-muted">Data de nascimento</label>
+                        <div class="col-sm-6">
+                            <span class="form-control bg-light" id="data_nasc" th:text="*{dataNasc}" aria-readonly="true"></span>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="mb-2 text-muted" for="senha">Senha</label>
-                        <input id="senha" type="password" class="form-control" name="senha" required th:field="*{senha}" th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'">
+                    <div class="form-group row">
+                        <label for="data_cad" class="col-sm-2 col-form-label text-muted">Data de cadastro</label>
+                        <div class="col-sm-6">
+                            <span class="form-control bg-light" id="data_cad" th:text="*{dataCad}" aria-readonly="true"></span>
+                        </div>
                     </div>
-
-
-                    <div class="align-items-center d-flex">
-                        <button type="submit" class="btn btn-primary ms-auto">
-                            Registrar
-                        </button>
+                    <div class="form-group row">
+                        <label for="status" class="col-sm-2 col-form-label text-muted">Status</label>
+                        <div class="col-sm-6">
+                            <span class="form-control bg-light" id="status" th:text="*{status}" aria-readonly="true"></span>
+                        </div>
                     </div>
+                    <button type="submit" class="btn btn-primary mt-1 ">Salvar</button>
+
                 </form>
 
+                <button th:id="${'btn_usuarios/excluir'}" type="button" class="pt-2 btn btn-danger btn"
+                        data-bs-toggle="modal" data-bs-target="#myModal">
+                    <span title="Exclusão desabilitada" aria-hidden="true">Excluir conta</span>
+                </button>
             </div>
 
 
