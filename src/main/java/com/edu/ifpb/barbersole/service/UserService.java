@@ -128,6 +128,26 @@ public class UserService implements UserDetailsService {
         return usuarioRepository.findById(id);
     }
 
+    public void deletarUsuarioById(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+
+        if (usuario.isPresent()) {
+            Usuario u = usuario.get();
+            u.setStatus("Inativo");
+            usuarioRepository.save(u);
+        }
+    }
+
+    public void ativarUsuarioById(Long id) {
+        Optional<Usuario> usuario = usuarioRepository.findById(id);
+
+        if (usuario.isPresent()) {
+            Usuario u = usuario.get();
+            u.setStatus("Ativo");
+            usuarioRepository.save(u);
+        }
+    }
+
 
 
 }

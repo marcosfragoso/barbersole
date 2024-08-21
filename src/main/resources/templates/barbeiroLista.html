@@ -88,6 +88,15 @@
     <section class="layout-content">
         <div class="container">
             <h3 class="pt-3 pb-3 fw-bold h1-title">Barbeiros</h3>
+            <div class="py-2" th:if="${sucesso} != null">
+                <div class="alert alert-success" role="alert">
+                    <i class="oi oi-check"></i>
+                    <span>
+                                        <strong th:text="${sucesso}"></strong>
+                                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-hover table-striped table-bordered table-sm">
 

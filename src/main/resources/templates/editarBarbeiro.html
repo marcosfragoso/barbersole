@@ -161,11 +161,16 @@
                     <button type="submit" class="btn btn-primary mt-1 ">Salvar</button>
 
                 </form>
-
-                <button th:id="${'btn_usuarios/excluir'}" type="button" class="pt-2 btn btn-danger btn"
-                        data-bs-toggle="modal" data-bs-target="#myModal">
-                    <span title="Exclusão desabilitada" aria-hidden="true">Excluir conta</span>
-                </button>
+                <div th:switch="${usuario.status}">
+                    <button th:case="'Ativo'" th:id="${'btn_usuarios/excluirBarbeiro/' + usuario.id}" type="button" class="pt-2 btn btn-danger btn"
+                            data-bs-toggle="modal" data-bs-target="#myModal">
+                        <span title="Exclusão desabilitada" aria-hidden="true">Excluir conta</span>
+                    </button>
+                    <button th:case="'Inativo'" th:id="${'btn_usuarios/ativarBarbeiro/' + usuario.id}" type="button" class="pt-2 btn btn-success btn"
+                            data-bs-toggle="modal" data-bs-target="#myModal">
+                        <span title="Exclusão desabilitada" aria-hidden="true">Ativar conta</span>
+                    </button>
+                </div>
             </div>
 
 
@@ -176,7 +181,7 @@
                             <h4 class="modal-title">Atenção</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Tem certeza que deseja excluir?</p>
+                            <p>Tem certeza disso?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

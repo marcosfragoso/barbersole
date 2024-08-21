@@ -41,14 +41,6 @@ public class UsuarioController {
         return "/editarBarbeiro";
     }
 
-    @GetMapping("/excluirBarbeiro/{id}")
-    public String excluirBarbeiro(@PathVariable("id") Long codigo) {
-        System.out.println("Cheguei aqui");
-        Optional<Usuario> barbeiro = userService.findById(codigo);
-        userService.deletarUsuario(barbeiro.get().getUsername());
-        return "redirect:/barbeiros/barbeiroLista";
-    }
-
     @PostMapping("/editarBarbeiro")
     public String editarBarbeiro(@Valid Usuario usuario, RedirectAttributes attr, BindingResult result) {
         if (result.hasErrors()) {
@@ -78,5 +70,21 @@ public class UsuarioController {
         userService.deletarUsuario(user.getUsername());
         session.invalidate();
         return "redirect:/login";
+    }
+
+    @GetMapping("excluirBarbeiro/{id}")
+    public String excluirBarbeiro(@PathVariable("id") Long id, ModelMap model, RedirectAttributes attr){
+        userService.deletarUsuarioById(id);
+        model.addAttribute("sucesso", "Barbeiro excluído com sucesso!");
+        attr.addFlashAttribute("sucesso", "Barbeiro excluído com sucesso!");
+        return "redirect:/barbeiros/barbeiroLista";
+    }
+
+    @GetMapping("ativarBarbeiro/{id}")
+    public String ativarBarbeiro(@PathVariable("id") Long id, ModelMap model, RedirectAttributes attr){
+        userService.ativarUsuarioById(id);
+        model.addAttribute("sucesso", "Barbeiro ativado com sucesso!");
+        attr.addFlashAttribute("sucesso", "Barbeiro ativado com sucesso!");
+        return "redirect:/barbeiros/barbeiroLista";
     }
 }
