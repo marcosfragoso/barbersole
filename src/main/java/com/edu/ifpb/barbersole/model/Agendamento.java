@@ -1,6 +1,7 @@
 package com.edu.ifpb.barbersole.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -39,5 +40,6 @@ public class Agendamento {
 
     @Column(name = "hora")
     @NotBlank
+    @FutureOrPresent
     private String hora;
 }
