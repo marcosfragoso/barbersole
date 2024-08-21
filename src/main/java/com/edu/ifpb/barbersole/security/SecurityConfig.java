@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/barbeiros/register/**")).hasAnyAuthority(ADMIN)
                 .requestMatchers(antMatcher("/usuarios/editarBarbeiro/**")).hasAnyAuthority(ADMIN)
                 .requestMatchers(antMatcher("/usuarios/excluirBarbeiro/**")).hasAnyAuthority(ADMIN, CLIENTE)
+                .requestMatchers(antMatcher("/agendamentos/agendar/**")).hasAnyAuthority(ADMIN, CLIENTE)
                 .anyRequest().authenticated()
         ).formLogin((formLogin) -> formLogin
                 .loginPage("/login")
