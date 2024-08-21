@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .requestMatchers(antMatcher("/perfil/**")).hasAnyAuthority(CLIENTE)
                 .requestMatchers(antMatcher("/barbeiros/register/**")).hasAnyAuthority(ADMIN)
                 .requestMatchers(antMatcher("/usuarios/editarBarbeiro/**")).hasAnyAuthority(ADMIN)
+                .requestMatchers(antMatcher("/usuarios/excluirBarbeiro/**")).hasAnyAuthority(ADMIN, CLIENTE)
                 .anyRequest().authenticated()
         ).formLogin((formLogin) -> formLogin
                 .loginPage("/login")

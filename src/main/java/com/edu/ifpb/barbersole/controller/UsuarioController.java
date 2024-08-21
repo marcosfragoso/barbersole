@@ -41,6 +41,14 @@ public class UsuarioController {
         return "/editarBarbeiro";
     }
 
+    @GetMapping("/excluirBarbeiro/{id}")
+    public String excluirBarbeiro(@PathVariable("id") Long codigo) {
+        System.out.println("Cheguei aqui");
+        Optional<Usuario> barbeiro = userService.findById(codigo);
+        userService.deletarUsuario(barbeiro.get().getUsername());
+        return "redirect:/barbeiros/barbeiroLista";
+    }
+
     @PostMapping("/editarBarbeiro")
     public String editarBarbeiro(@Valid Usuario usuario, RedirectAttributes attr, BindingResult result) {
         if (result.hasErrors()) {

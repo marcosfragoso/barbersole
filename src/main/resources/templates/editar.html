@@ -162,8 +162,8 @@
 
                     </form>
 
-                    <button th:id="${'btn_usuarios/excluir'}" type="button" class="pt-2 btn btn-danger btn"
-                            data-bs-toggle="modal" data-bs-target="#myModal">
+                    <button th:id="${'btn_usuarios/excluir'}" sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')" type="button" class="pt-2 btn btn-danger btn"
+                            data-bs-toggle="modal" data-bs-target="#myModal" data-id="${usuario.id}">
                         <span title="Exclusão desabilitada" aria-hidden="true">Excluir conta</span>
                     </button>
                 </div>
