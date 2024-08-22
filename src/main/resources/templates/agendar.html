@@ -86,7 +86,81 @@
         </nav>
     </aside>
     <section class="layout-content">
-        <h1>Agendar</h1>
+        <div class="container">
+            <h3 class="pt-3 pb-3 fw-bold h1-title">Agendar</h3>
+            <div class="py-2" th:if="${sucesso} != null">
+                <div class="alert alert-success" role="alert">
+                    <i class="oi oi-check"></i>
+                    <span>
+                                        <strong th:text="${sucesso}"></strong>
+                                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+            <form th:action="@{/agendamentos/agendarServico}" th:object="${agendamento}" method="POST">
+
+
+
+                <div th:if="${#fields.hasAnyErrors()}">
+                    <div class="alert alert-danger alert-dismissible fade show"
+                         role="alert">
+                        <div th:each="error : ${#fields.detailedErrors()}">
+                            <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                aria-label="Close"></button>
+                    </div>
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="mb-2 text-muted" for="servico">Serviço</label>
+                    <select id="servico" type="text" class="form-select" name="servico" required autofocus th:field="*{servico}" >
+                        <option value="">Selecione o serviço</option>
+                        <option value="Corte">Corte</option>
+                        <option value="Barba">Barba</option>
+                        <option value="Corte e barba">Corte e barba</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        o serviço é obrigatório
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-2 text-muted" for="barbeiro">Barbeiro</label>
+                    <select id="barbeiro" class="form-select" name="barbeiro" required autofocus th:field="*{barbeiro}" >
+                        <option value="" disabled selected>Selecione o barbeiro</option>
+                        <option th:each="b : ${barbeiros}" th:value="${b.id}" th:text="${b.nome}"></option>
+                    </select>
+                    <div class="invalid-feedback">
+                        O barbeiro é obrigatório
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-2 text-muted" for="data">Selecione a data</label>
+                    <input id="data" type="date" class="form-control" name="data" value="" required th:field="*{data}" >
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-2 text-muted" for="hora">Selecione o horário</label>
+                    <select id="hora" class="form-select" name="hora" required autofocus th:field="*{hora}" >
+                        <option value="" disabled selected>Selecione o barbeiro</option>
+                        <option value="8">08:00</option>
+                        <option value="9">09:00</option>
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12">12:00</option>
+                    </select>
+                </div>
+
+                <div class="align-items-center d-flex">
+                    <button type="submit" class="btn btn-primary ms-auto">
+                        Agendar
+                    </button>
+                </div>
+            </form>
+        </div>
     </section>
 </div>
 

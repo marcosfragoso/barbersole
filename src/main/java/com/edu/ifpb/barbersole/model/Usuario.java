@@ -3,13 +3,16 @@ package com.edu.ifpb.barbersole.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "usuario")
-@Data
+@Getter
+@Setter
 public class Usuario {
 
     @Id
@@ -50,4 +53,11 @@ public class Usuario {
             inverseJoinColumns = { @JoinColumn (name = "id_perfil")}
     )
     private List<Perfil> perfis;
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                '}';
+    }
 }

@@ -5,12 +5,15 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "agendamento")
-@Data
+@Getter
+@Setter
 public class Agendamento {
 
     @Id
@@ -19,7 +22,6 @@ public class Agendamento {
     private Long id;
 
     @Column(name = "servico")
-    @NotBlank
     private String servico;
 
     @ManyToOne
@@ -32,14 +34,13 @@ public class Agendamento {
 
     @Column(name = "data")
     @NotNull
+    @FutureOrPresent
     private LocalDate data;
 
     @Column(name = "status")
-    @NotBlank
     private String status;
 
     @Column(name = "hora")
     @NotBlank
-    @FutureOrPresent
     private String hora;
 }
