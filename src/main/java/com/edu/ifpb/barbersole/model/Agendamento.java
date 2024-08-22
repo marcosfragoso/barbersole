@@ -22,6 +22,7 @@ public class Agendamento {
     private Long id;
 
     @Column(name = "servico")
+    @NotBlank(message = "Escolha um dos nossos 3 serviços.")
     private String servico;
 
     @ManyToOne
@@ -34,13 +35,13 @@ public class Agendamento {
 
     @Column(name = "data")
     @NotNull
-    @FutureOrPresent
+    @FutureOrPresent(message = "Você não pode agendar para uma data que já passou.")
     private LocalDate data;
 
     @Column(name = "status")
     private String status;
 
     @Column(name = "hora")
-    @NotBlank
+    @NotBlank(message = "Escolha um horário.")
     private String hora;
 }

@@ -129,7 +129,7 @@
                 <div class="mb-3">
                     <label class="mb-2 text-muted" for="barbeiro">Barbeiro</label>
                     <select id="barbeiro" class="form-select" name="barbeiro" required autofocus th:field="*{barbeiro}" >
-                        <option value="" disabled selected>Selecione o barbeiro</option>
+                        <option value="">Selecione o barbeiro</option>
                         <option th:each="b : ${barbeiros}" th:value="${b.id}" th:text="${b.nome}"></option>
                     </select>
                     <div class="invalid-feedback">
@@ -145,7 +145,7 @@
                 <div class="mb-3">
                     <label class="mb-2 text-muted" for="hora">Selecione o horário</label>
                     <select id="hora" class="form-select" name="hora" required autofocus th:field="*{hora}" >
-                        <option value="" disabled selected>Selecione o barbeiro</option>
+                        <option value="">Selecione o barbeiro</option>
                         <option value="8">08:00</option>
                         <option value="9">09:00</option>
                         <option value="10">10:00</option>
