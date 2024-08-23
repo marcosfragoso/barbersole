@@ -2,6 +2,7 @@ package com.edu.ifpb.barbersole.service;
 
 
 import com.edu.ifpb.barbersole.model.Agendamento;
+import com.edu.ifpb.barbersole.model.Usuario;
 import com.edu.ifpb.barbersole.repository.AgendamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,13 +10,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class AgendamentoService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AgendamentoService.class);
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -33,14 +31,17 @@ public class AgendamentoService {
                 .map(Agendamento::getHora)
                 .collect(Collectors.toList());
 
-        logger.info("Horários indisponíveis: {}", horariosIndisponiveis);
+
 
         List<String> horariosDisponiveis = todosHorarios.stream()
                 .filter(horario -> !horariosIndisponiveis.contains(horario))
                 .collect(Collectors.toList());
 
-        logger.info("Horários disponíveis: {}", horariosDisponiveis);
 
         return horariosDisponiveis;
+    }
+
+    public List<Agendamento> buscarAgendamentosPorCliente(Usuario usuario) {
+        return agendamentoRepository.findByCliente(usuario);
     }
 }

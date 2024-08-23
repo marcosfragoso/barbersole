@@ -1,7 +1,9 @@
 package com.edu.ifpb.barbersole.controller;
 
+import com.edu.ifpb.barbersole.model.Agendamento;
 import com.edu.ifpb.barbersole.model.Token;
 import com.edu.ifpb.barbersole.model.Usuario;
+import com.edu.ifpb.barbersole.service.AgendamentoService;
 import com.edu.ifpb.barbersole.service.EmailService;
 import com.edu.ifpb.barbersole.service.TokenService;
 import com.edu.ifpb.barbersole.service.UserService;
@@ -10,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +38,9 @@ public class HomeController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private AgendamentoService agendamentoService;
 
     @GetMapping({"/"})
     public String index(HttpServletResponse response) {
@@ -62,9 +69,15 @@ public class HomeController {
     }
 
     @GetMapping({"/home"})
-    public String home(HttpServletResponse response, ModelMap model) {
+    public String home(HttpServletResponse response, ModelMap model, @AuthenticationPrincipal User user) {
         List<Usuario> barbeiros = userService.listarBarbeiros();
         model.addAttribute("barbeiros", barbeiros);
+
+        Optional<Usuario> u = userService.findByUsername(user.getUsername());
+        Usuario usuario = u.get();
+
+        List<Agendamento> agendamentos = agendamentoService.buscarAgendamentosPorCliente(usuario);
+        model.addAttribute("agendamentos", agendamentos);
         return "home";
     }
 
