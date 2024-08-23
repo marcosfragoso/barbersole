@@ -139,18 +139,13 @@
 
                 <div class="mb-3">
                     <label class="mb-2 text-muted" for="data">Selecione a data</label>
-                    <input id="data" type="date" class="form-control" name="data" value="" required th:field="*{data}" >
+                    <input id="data" type="date" class="form-control" name="data" required th:field="*{data}" >
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3" id="horarios-container" style="display: none;">
                     <label class="mb-2 text-muted" for="hora">Selecione o horário</label>
-                    <select id="hora" class="form-select" name="hora" required autofocus th:field="*{hora}" >
-                        <option value="">Selecione o barbeiro</option>
-                        <option value="8">08:00</option>
-                        <option value="9">09:00</option>
-                        <option value="10">10:00</option>
-                        <option value="11">11:00</option>
-                        <option value="12">12:00</option>
+                    <select id="hora" class="form-select" name="hora" required th:field="*{hora}">
+                        <option value="">Selecione o horário</option>
                     </select>
                 </div>
 
@@ -183,5 +178,40 @@
         integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:src="@{/js/navbar.js}"></script>
+<script>
+    $('#data').on('change', function () {
+    let selectedDate = $(this).val();
+    let barbeiroId = $('#barbeiro').val();
+
+    if (selectedDate && barbeiroId) {
+        $.ajax({
+            url: '/agendamentos/horarios-disponiveis',
+            type: 'GET',
+            data: {
+                data: selectedDate,
+                barbeiroId: barbeiroId
+            },
+            success: function (horarios) {
+                $('#hora').empty();
+
+                if (horarios.length > 0) {
+                    $('#hora').append('<option value="">Selecione o horário</option>');
+                    $.each(horarios, function (index, horario) {
+                        $('#hora').append('<option value="' + horario + '">' + horario + '</option>');
+                    });
+                    $('#horarios-container').show();
+                } else {
+                    $('#hora').append('<option value="">Sem horários disponíveis</option>');
+                    $('#horarios-container').show();
+                }
+            }
+        });
+    } else {
+        $('#horarios-container').hide();
+    }
+});
+
+
+</script>
 </body>
 </html>

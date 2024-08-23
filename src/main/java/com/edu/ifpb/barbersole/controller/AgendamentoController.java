@@ -12,12 +12,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,5 +52,11 @@ public class AgendamentoController {
     @ModelAttribute("barbeiros")
     public List<Usuario> getUsuarios() {
         return userService.listarBarbeiros();
+    }
+
+    @GetMapping("/horarios-disponiveis")
+    @ResponseBody
+    public List<String> getHorariosDisponiveis(@RequestParam Long barbeiroId, @RequestParam String data) {
+        return agendamentoService.buscarHorariosDisponiveis(barbeiroId, LocalDate.parse(data));
     }
 }
