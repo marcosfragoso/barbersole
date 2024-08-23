@@ -16,7 +16,7 @@
             href=" https://cdn.jsdelivr.net/npm/open-iconic@1.1.1/font/css/open-iconic-bootstrap.min.css "
             rel="stylesheet ">
     <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon">
-    <title>BarberSole App | Barbeiros</title>
+    <title>BarberSole App | Meus agendamentos</title>
 </head>
 <body>
 <header>
@@ -29,7 +29,7 @@
                     <i class="oi oi-menu "></i>
                 </button>
 
-                <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none">
+                <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none pl-3">
                     <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
                 </a>
 
@@ -87,55 +87,38 @@
     </aside>
     <section class="layout-content">
         <div class="container">
-            <h3 class="pt-3 pb-3 fw-bold h1-title">Barbeiros</h3>
-            <div class="py-2" th:if="${sucesso} != null">
-                <div class="alert alert-success" role="alert">
-                    <i class="oi oi-check"></i>
-                    <span>
-                                        <strong th:text="${sucesso}"></strong>
-                                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-            <div class="table-responsive">
+            <h3 class="pt-3 pb-3 fw-bold h1-title">Meus agendamentos</h3>
+            <div th:if="${agendamentos != null and !agendamentos.isEmpty()}" class="table-responsive">
                 <table class="table table-hover table-striped table-bordered table-sm">
 
                     <thead class="table-dark">
-                        <tr>
-                            <th class="text-center fw-bold" scope="col">Código</th>
-                            <th class="text-center fw-bold" scope="col">Nome</th>
-                            <th class="text-center fw-bold" scope="col">Status</th>
-                            <th class="text-center fw-bold" scope="col">Data de cadastro</th>
-                            <th class="text-center fw-bold" scope="col">Ação</th>
-                        </tr>
+                    <tr>
+                        <th class="fw-bold" scope="col">Barbeiro</th>
+                        <th class="fw-bold" scope="col">Data</th>
+                        <th class="fw-bold" scope="col">Serviço</th>
+                        <th class="fw-bold" scope="col">Horário</th>
+                        <th class="fw-bold" scope="col">Status</th>
+                    </tr>
                     </thead>
-                    <tr th:each="b : ${barbeiros}">
-                        <th class="text-center fw-bold" th:text="${b.id}"></th>
-                        <td th:text="${b.nome}"></td>
-                        <td class="text-center" th:text="${b.status}"></td>
-                        <td class="text-end" th:text="${b.dataCad}"></td>
-                        <td class="text-center" colspan="2"><a class="btn btn-info btn-sm"
-                                           th:href="@{/usuarios/editar/{id}(id=${b.id})}"
-                                           role="button">
-                               <span class="bi bi-pencil-square" title="Editar"
-                                     aria-hidden="true"></span>
-                        </a>
-                        </td>
+                    <tr th:each="a : ${agendamentos}">
+                        <th  th:text="${a.barbeiro.nome}"></th>
+                        <td th:text="${a.data}"></td>
+                        <td th:text="${a.servico}"></td>
+                        <td  th:text="${a.hora}"></td>
+                        <td  th:text="${a.status}"></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <div th:if="${error}">
-                <div class="alert alert-danger alert-dismissible fade show"
-                     role="alert">
-                    <div>
-                        <i class="oi oi-warning"></i> <span th:text="${error}"></span>
-                    </div>
+            <div th:unless="${agendamentos != null and !agendamentos.isEmpty()}">
+                <div class="alert alert-dark text-center" role="alert">
+                    Você não possui agendamentos.
                 </div>
             </div>
         </div>
     </section>
 </div>
+
 
 
 
@@ -155,5 +138,6 @@
         integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script th:src="@{/js/navbar.js}"></script>
+
 </body>
 </html>

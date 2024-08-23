@@ -35,6 +35,16 @@ public class AgendamentoController {
         return "agendar";
     }
 
+    @GetMapping("/")
+    public String agendamentos(HttpServletResponse response, ModelMap model, @AuthenticationPrincipal User user){
+        Optional<Usuario> u = userService.findByUsername(user.getUsername());
+        Usuario usuario = u.get();
+
+        List<Agendamento> agendamentos = agendamentoService.buscarAgendamentosPorCliente(usuario);
+        model.addAttribute("agendamentos", agendamentos);
+        return "agendamentos";
+    }
+
     @PostMapping("/agendarServico")
     public String agendarServico(@AuthenticationPrincipal User user, @Valid Agendamento agendamento, BindingResult result, RedirectAttributes attr){
         if (result.hasErrors()) {
