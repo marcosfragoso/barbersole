@@ -115,6 +115,7 @@
                                         <th class="fw-bold" scope="col">Serviço</th>
                                         <th class="fw-bold" scope="col">Horário</th>
                                         <th class="fw-bold" scope="col">Status</th>
+                                        <th class="fw-bold" scope="col">Ação</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -124,9 +125,42 @@
                                         <td th:text="${a.servico}"></td>
                                         <td th:text="${a.hora}"></td>
                                         <td th:text="${a.status}"></td>
+
+                                        <td>
+                                            <div th:if="${a.status != 'Cancelado'}">
+                                                <a class="btn btn-secondary btn-sm"
+                                                   th:href="@{/agendamentos/editar/{id}(id=${a.id})}"
+                                                   role="button">
+                                   <span class="oi oi-brush" title="Editar"
+                                         aria-hidden="true"></span>
+                                                </a>
+
+                                                <button th:id="${'btn_agendamentos/excluir/' + a.id}"
+                                                        type="button" class="btn btn-danger btn-sm"
+                                                        data-bs-toggle="modal" data-bs-target="#myModal">
+                                                    <span class="oi oi-circle-x" title="Exclusão desabilitada" aria-hidden="true"></span>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Atenção</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Tem certeza que deseja cancelar o agendamento?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div th:unless="${agendamentos != null and !agendamentos.isEmpty()}">
                                 <div class="alert alert-dark text-center" role="alert">

@@ -69,4 +69,27 @@ public class AgendamentoController {
     public List<String> getHorariosDisponiveis(@RequestParam Long barbeiroId, @RequestParam String data) {
         return agendamentoService.buscarHorariosDisponiveis(barbeiroId, LocalDate.parse(data));
     }
+
+    @GetMapping("/editar/{id}")
+    public String preEditar(@PathVariable("id") Long id, ModelMap model) {
+        Agendamento agendamento = agendamentoService.buscarAgendamentoPorId(id).orElse(null);
+        model.addAttribute("agendamento", agendamento);
+        return "agendar";
+    }
+
+    @PostMapping("/editar")
+    public String editar(Agendamento agendamento, RedirectAttributes attr) {
+        agendamentoService.atualizarAgendamento(agendamento);
+        attr.addFlashAttribute("sucesso", "Agendamento atualizado com sucesso!");
+        return "redirect:/agendamentos/agendar";
+    }
+
+    @GetMapping("/excluir/{id}")
+    public String excluir(@PathVariable("id") Long id, ModelMap model) {
+        Agendamento agendamento = agendamentoService.buscarAgendamentoPorId(id).orElse(null);
+        agendamento.setStatus("Cancelado");
+        agendamentoService.alterarAgendamento(agendamento);
+        model.addAttribute("sucesso", "Agendamento cancelado com sucesso!");
+        return "redirect:/home";
+    }
 }
