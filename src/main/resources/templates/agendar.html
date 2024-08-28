@@ -60,7 +60,7 @@
                         <i class="oi oi-home px-2"></i><span>Home</span>
                     </a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
                     <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
                     </a>
                 </li>

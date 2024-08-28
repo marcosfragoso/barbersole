@@ -65,6 +65,10 @@ public class AgendamentoService {
         return agendamentoRepository.findByCliente(usuario);
     }
 
+    public List<Agendamento> buscarAgendamentosPorBarbeiro(Usuario barbeiro) {
+        return agendamentoRepository.findByBarbeiro(barbeiro);
+    }
+
     public Optional<Agendamento> buscarAgendamentoPorId(Long codigo) {
         return agendamentoRepository.findById(codigo);
     }

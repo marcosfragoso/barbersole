@@ -60,7 +60,7 @@
                         <i class="oi oi-home px-2"></i><span>Home</span>
                     </a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
                     <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
                     </a>
                 </li>
@@ -93,7 +93,8 @@
 
                     <thead class="table-dark">
                     <tr>
-                        <th class="fw-bold" scope="col">Barbeiro</th>
+                        <th sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')" class="fw-bold" scope="col">Barbeiro</th>
+                        <th sec:authorize="hasAnyAuthority('BARBEIRO')" class="fw-bold" scope="col">Cliente</th>
                         <th class="fw-bold" scope="col">Data</th>
                         <th class="fw-bold" scope="col">Serviço</th>
                         <th class="fw-bold" scope="col">Horário</th>
@@ -102,14 +103,15 @@
                     </tr>
                     </thead>
                     <tr th:each="a : ${agendamentos}">
-                        <th  th:text="${a.barbeiro.nome}"></th>
+                        <th sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')"  th:text="${a.barbeiro.nome}"></th>
+                        <th sec:authorize="hasAnyAuthority('BARBEIRO')"  th:text="${a.cliente.nome}"></th>
                         <td th:text="${#temporals.format(a.data, 'dd/MM/yyyy')}"></td>
                         <td th:text="${a.servico}"></td>
                         <td  th:text="${a.hora}"></td>
                         <td  th:text="${a.status}"></td>
                         <td>
                             <div th:if="${a.status != 'Cancelado'}">
-                                <a class="btn btn-secondary btn-sm"
+                                <a sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')" class="btn btn-secondary btn-sm"
                                    th:href="@{/agendamentos/editar/{id}(id=${a.id})}"
                                    role="button">
                                    <span class="oi oi-brush" title="Editar"

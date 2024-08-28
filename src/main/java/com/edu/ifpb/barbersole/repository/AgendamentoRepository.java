@@ -16,4 +16,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     List<Agendamento> findByBarbeiroIdAndData(@Param("barbeiroId") Long barbeiroId, @Param("data") LocalDate data);
 
     List<Agendamento> findByCliente(Usuario cliente);
+
+    List<Agendamento> findByBarbeiro(Usuario barbeiro);
 }

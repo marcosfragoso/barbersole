@@ -35,7 +35,7 @@ public class Agendamento {
 
     @Column(name = "data")
     @NotNull
-    @FutureOrPresent(message = "Você não pode agendar para uma data que já passou.")
+    //@FutureOrPresent(message = "Você não pode agendar para uma data que já passou.")
     private LocalDate data;
 
     @Column(name = "status")

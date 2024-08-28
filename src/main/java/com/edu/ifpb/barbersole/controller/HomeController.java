@@ -76,7 +76,22 @@ public class HomeController {
         Optional<Usuario> u = userService.findByUsername(user.getUsername());
         Usuario usuario = u.get();
 
-        List<Agendamento> agendamentos = agendamentoService.buscarAgendamentosPorCliente(usuario);
+        boolean isCliente = usuario.getPerfis().stream()
+                .anyMatch(perfil -> "CLIENTE".equals(perfil.getNome()));
+
+        boolean isAdmin = usuario.getPerfis().stream()
+                .anyMatch(perfil -> "ADMIN".equals(perfil.getNome()));
+
+        boolean isBarbeiro = usuario.getPerfis().stream()
+                .anyMatch(perfil -> "BARBEIRO".equals(perfil.getNome()));
+
+        List<Agendamento> agendamentos;
+
+        if (isBarbeiro) {
+            agendamentos = agendamentoService.buscarAgendamentosPorBarbeiro(usuario);
+        } else {
+            agendamentos = agendamentoService.buscarAgendamentosPorCliente(usuario);
+        }
         model.addAttribute("agendamentos", agendamentos);
         return "home";
     }

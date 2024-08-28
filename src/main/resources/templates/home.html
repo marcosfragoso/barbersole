@@ -60,7 +60,7 @@
                             <i class="oi oi-home px-2"></i><span>Home</span>
                         </a>
                     </li>
-                    <li class="nav-item ">
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
                         <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
                         </a>
                     </li>
@@ -88,7 +88,7 @@
         <section class="layout-content">
             <div class="row m-0 h-100">
                 <div class="col-lg-9 col-md-12">
-                    <div class="row">
+                    <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
                         <h3 class="pt-3 pb-3 fw-bold h1-title">Agende aqui o seu serviço</h3>
                         <div class="row">
                             <div class="col-md-2 pt-2" th:each="b : ${barbeiros}">
@@ -102,7 +102,7 @@
                             </div>
                         </div>
                     </div>
-                    <hr>
+                    <hr sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
                     <div class="row">
                         <h3 class="pt-3 pb-3 fw-bold h1-title">Meus agendamentos</h3>
                         <div>
@@ -128,7 +128,7 @@
 
                                         <td>
                                             <div th:if="${a.status != 'Cancelado'}">
-                                                <a class="btn btn-secondary btn-sm"
+                                                <a sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')" class="btn btn-secondary btn-sm"
                                                    th:href="@{/agendamentos/editar/{id}(id=${a.id})}"
                                                    role="button">
                                    <span class="oi oi-brush" title="Editar"
