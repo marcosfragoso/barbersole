@@ -1,6 +1,7 @@
 package com.edu.ifpb.barbersole.controller;
 
 import com.edu.ifpb.barbersole.model.Agendamento;
+import com.edu.ifpb.barbersole.model.ConfirmacaoDTO;
 import com.edu.ifpb.barbersole.model.Usuario;
 import com.edu.ifpb.barbersole.service.AgendamentoService;
 import com.edu.ifpb.barbersole.service.UserService;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/agendamentos")
@@ -68,7 +70,12 @@ public class AgendamentoController {
         Usuario usuario = u.get();
         agendamento.setCliente(usuario);
         agendamento.setStatus("Agendado");
+
+        Random random = new Random();
+        int numero = 100000 + random.nextInt(900000);
+        agendamento.setCodigo(Integer.toString(numero));
         agendamentoService.salvar(agendamento);
+
         attr.addFlashAttribute("sucesso", "Agendamento concluído com sucesso!");
         return "redirect:/agendamentos/agendar";
     }
@@ -95,7 +102,7 @@ public class AgendamentoController {
     public String editar(Agendamento agendamento, RedirectAttributes attr) {
         agendamentoService.atualizarAgendamento(agendamento);
         attr.addFlashAttribute("sucesso", "Agendamento atualizado com sucesso!");
-        return "redirect:/agendamentos/agendar";
+        return "redirect:/home";
     }
 
     @GetMapping("/excluir/{id}")
@@ -105,5 +112,30 @@ public class AgendamentoController {
         agendamentoService.alterarAgendamento(agendamento);
         model.addAttribute("sucesso", "Agendamento cancelado com sucesso!");
         return "redirect:/home";
+    }
+
+    @GetMapping("/confirmar/{id}")
+    public String confirmar(@PathVariable("id") Long id, ModelMap model) {
+        Agendamento agendamento = agendamentoService.buscarAgendamentoPorId(id).orElse(null);
+        model.addAttribute("agendamento", agendamento);
+
+        ConfirmacaoDTO confirmacaoDTO = new ConfirmacaoDTO();
+        model.addAttribute("confirmacaodto", confirmacaoDTO);
+        return "confirmar";
+
+    }
+
+    @PostMapping("/confirmarAgendamento")
+    public String confirmarAgendamento(ConfirmacaoDTO confirmacaoDTO, RedirectAttributes attr) {
+        Agendamento agendamento = agendamentoService.buscarAgendamentoPorId(confirmacaoDTO.getId()).orElse(null);
+
+        if (agendamento.getCodigo().equals(confirmacaoDTO.getCodigo())) {
+            agendamento.setStatus("Confirmado");
+            agendamentoService.alterarAgendamento(agendamento);
+            attr.addFlashAttribute("success", "Agendamento confirmado com sucesso!");
+        } else {
+            attr.addFlashAttribute("error", "Código inválido, tente novamente!");
+        }
+        return "redirect:/agendamentos/confirmar/" + agendamento.getId();
     }
 }

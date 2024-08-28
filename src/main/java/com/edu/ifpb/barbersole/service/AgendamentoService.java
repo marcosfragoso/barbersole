@@ -25,6 +25,8 @@ public class AgendamentoService {
     public void salvar(Agendamento agendamento) {
         agendamentoRepository.save(agendamento);
 
+        Long agendamentoId = agendamento.getId();
+        String codigo = agendamento.getCodigo();
 
         String subject = "Confirmação de Agendamento - BarberSole App";
         String message = "Olá,\n\nVocê reservou o seguinte agendamento: \n\n\n" +
@@ -33,8 +35,9 @@ public class AgendamentoService {
                 "Data: " + agendamento.getData() + "\n" +
                 "Horário: " + agendamento.getHora() + "\n\n\n" +
                 "Por favor, clique no link abaixo para confirmar: \n" +
-                "http://localhost:8080/home \n\n" +
-                "Se você não fez esse agendamento, por favor ignore este e-mail.";
+                "http://localhost:8080/agendamentos/confirmar/" + agendamentoId +
+                "\nE digite o seguinte código: " + codigo +
+                "\n\nSe você não fez esse agendamento, por favor ignore este e-mail.";
 
         emailService.enviarEmail(agendamento.getCliente().getUsername(), subject, message);
     }

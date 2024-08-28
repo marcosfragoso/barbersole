@@ -41,6 +41,9 @@ public class Agendamento {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "codigo", nullable = false)
+    private String codigo;
+
     @Column(name = "hora")
     @NotBlank(message = "Escolha um horário.")
     private String hora;
