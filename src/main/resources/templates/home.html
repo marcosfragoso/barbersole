@@ -201,10 +201,10 @@
                                             height: '60%'
                                         },
                                         title: {
-                                            text: 'Estatísticas Por Serviço'
+                                            text: 'Análise de Serviços Realizados'
                                         },
                                         subtitle: {
-                                            text: 'Quantidade de serviços não cancelados'
+                                            text: 'Comparativo dos Serviços Não Cancelados'
                                         },
                                         xAxis: {
                                             categories: [[${cortesMap.keySet()}]],
@@ -220,7 +220,7 @@
                                         tooltip: {
                                             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                                             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                                '<td style="padding:0"><b>{point.y:.1f} K</b></td></tr>',
+                                                '<td style="padding:0"><b>{point.y}</b></td></tr>',
                                             footerFormat: '</table>',
                                             shared: true,
                                             useHTML: true
@@ -276,43 +276,48 @@
                             <div id="container2" style="height: 400px"></div>
                             <script th:inline="javascript">
                                 Highcharts.chart('container2', {
-                                    chart : {
-                                        type : 'pie',
-                                        options3d : {
-                                            enabled : true,
-                                            alpha : 50,
-                                            beta : 0
+                                    chart: {
+                                        type: 'pie',
+                                        options3d: {
+                                            enabled: true,
+                                            alpha: 50,
+                                            beta: 0
                                         }
                                     },
-                                    title : {
-                                        text : 'Estatísticas por Status'
+                                    title: {
+                                        text: 'Análise de Agendamentos por Status'
                                     },
-                                    tooltip : {
-                                        pointFormat : '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                    subtitle: {
+                                        text: 'Distribuição Percentual e Total de Agendamentos'
                                     },
-                                    plotOptions : {
-                                        pie : {
-                                            allowPointSelect : true,
-                                            cursor : 'pointer',
-                                            depth : 35,
-                                            dataLabels : {
-                                                enabled : true,
-                                                format : '{point.name}'
+                                    tooltip: {
+                                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+                                    },
+                                    plotOptions: {
+                                        pie: {
+                                            allowPointSelect: true,
+                                            cursor: 'pointer',
+                                            depth: 35,
+                                            dataLabels: {
+                                                enabled: true,
+                                                format: '{point.name}: {point.y} ({point.percentage:.1f}%)'
                                             }
                                         }
                                     },
-                                    series : [ {
-                                        type : 'pie',
-                                        name : 'Ratio',
-                                        data : [
-                                            { name: 'Confirmado', y: [[${Confirmado}]], color: '#03C03C' },
-                                            { name: 'Agendado', y: [[${Agendado}]], color: '#C0C0C0' },
-                                            { name: 'Cancelado', y: [[${Cancelado}]], color: '#CE2029' }
+                                    series: [{
+                                        type: 'pie',
+                                        name: 'Agendamentos',
+                                        data: [
+                                            { name: 'Confirmado', y: [[${ConfirmadoQtd}]], color: '#03C03C', percentage: [[${Confirmado}]] },
+                                            { name: 'Agendado', y: [[${AgendadoQtd}]], color: '#C0C0C0', percentage: [[${Agendado}]] },
+                                            { name: 'Cancelado', y: [[${CanceladoQtd}]], color: '#CE2029', percentage: [[${Cancelado}]] }
                                         ]
-                                    } ]
+                                    }]
                                 });
                             </script>
                         </div>
+
+
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-12 bg-light">

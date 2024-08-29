@@ -112,6 +112,10 @@ public class HomeController {
             model.addAttribute("Confirmado", confirmadoPorcentagem);
             model.addAttribute("Agendado", agendadoPorcentagem);
 
+            model.addAttribute("CanceladoQtd", qntdCancelado);
+            model.addAttribute("ConfirmadoQtd", qntdConfirmado);
+            model.addAttribute("AgendadoQtd", qntdAgendado);
+
         } else {
             agendamentos = agendamentoService.buscarAgendamentosPorCliente(usuario);
         }
