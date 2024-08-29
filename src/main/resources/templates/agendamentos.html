@@ -112,7 +112,10 @@
                         <td  th:text="${a.status}"></td>
                         <td sec:authorize="hasAnyAuthority('BARBEIRO')" >
                             <span th:text="${a.cliente.telefone}"></span>
-                            <span class="bi bi-whatsapp"></span>
+                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="popover" data-bs-trigger="focus"
+                                    th:attr="data-bs-content=${'Olá, ' + a.cliente.nome + ', estamos prontos para atender você!'}">
+                                <span class="bi bi-whatsapp"></span>
+                            </button>
                         </td>
                         <td>
                             <div th:if="${a.status != 'Cancelado' && a.status != 'Confirmado'}">

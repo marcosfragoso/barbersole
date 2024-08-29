@@ -84,4 +84,16 @@ public class AgendamentoService {
     public Agendamento alterarAgendamento(Agendamento agendamento) {
         return agendamentoRepository.save(agendamento);
     }
+
+    public Long getQuantidadeByServico(String servico, Long barbeiroId) {
+        return agendamentoRepository.countByServico(servico, barbeiroId);
+    }
+
+    public Long countAgendamentos(Long barbeiroId) {
+        return agendamentoRepository.countAgendamentos(barbeiroId);
+    }
+
+    public Long countAgendamentosPorStatus(String status, Long barbeiroId) {
+        return agendamentoRepository.countByStatus(status, barbeiroId);
+    }
 }

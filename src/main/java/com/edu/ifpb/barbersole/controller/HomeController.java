@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -89,6 +91,27 @@ public class HomeController {
 
         if (isBarbeiro) {
             agendamentos = agendamentoService.buscarAgendamentosPorBarbeiro(usuario);
+
+            Map<String, Long> cortesMap = new LinkedHashMap<>();
+            cortesMap.put("Corte", agendamentoService.getQuantidadeByServico("Corte", usuario.getId()));
+            cortesMap.put("Barba", agendamentoService.getQuantidadeByServico("Barba", usuario.getId()));
+            cortesMap.put("Corte e barba", agendamentoService.getQuantidadeByServico("Corte e barba", usuario.getId()));
+            model.addAttribute("cortesMap", cortesMap);
+
+
+            Long qntdCancelado = agendamentoService.countAgendamentosPorStatus("Cancelado", usuario.getId());
+            Long qntdConfirmado = agendamentoService.countAgendamentosPorStatus("Confirmado", usuario.getId());
+            Long qntdAgendado = agendamentoService.countAgendamentosPorStatus("Agendado", usuario.getId());
+            Long qntdTotal = agendamentoService.countAgendamentos(usuario.getId());
+
+            double canceladoPorcentagem = (qntdCancelado.doubleValue() / qntdTotal.doubleValue()) * 100;
+            double confirmadoPorcentagem = (qntdConfirmado.doubleValue() / qntdTotal.doubleValue()) * 100;
+            double agendadoPorcentagem = (qntdAgendado.doubleValue() / qntdTotal.doubleValue()) * 100;
+
+            model.addAttribute("Cancelado", canceladoPorcentagem);
+            model.addAttribute("Confirmado", confirmadoPorcentagem);
+            model.addAttribute("Agendado", agendadoPorcentagem);
+
         } else {
             agendamentos = agendamentoService.buscarAgendamentosPorCliente(usuario);
         }

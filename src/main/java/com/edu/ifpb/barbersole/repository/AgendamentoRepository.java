@@ -18,4 +18,15 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     List<Agendamento> findByCliente(Usuario cliente);
 
     List<Agendamento> findByBarbeiro(Usuario barbeiro);
+
+    @Query(value = "select count(agendamento.id) from agendamento " +
+            "where agendamento.servico = :servico and agendamento.status != 'Cancelado' and agendamento.barbeiro = :barbeiroId", nativeQuery = true)
+    Long countByServico(@Param("servico") String servico, @Param("barbeiroId") Long barbeiroId);
+
+    @Query(value = "select count(agendamento.id) from agendamento " +
+            "where agendamento.status = :status and agendamento.barbeiro = :barbeiroId", nativeQuery = true)
+    Long countByStatus(@Param("status") String status, @Param("barbeiroId") Long barbeiroId);
+
+    @Query(value = "select count(agendamento.id) from agendamento where agendamento.barbeiro = :barbeiroId", nativeQuery = true)
+    Long countAgendamentos(@Param("barbeiroId") Long barbeiroId);
 }
