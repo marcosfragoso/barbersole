@@ -19,6 +19,8 @@
     <title>BarberSole App | Home</title>
 </head>
 <body>
+
+    <!-- Header -->
     <header>
         <div class="px-3 py-2 bg-dark text-white">
             <div class="pt-0">
@@ -51,7 +53,11 @@
             </div>
         </div>
     </header>
+
+    <!-- Layout -->
     <div class="layout-main">
+
+        <!-- Sidebar -->
         <aside>
             <nav class="sidebar sidebar-open navbar-expand-md">
                 <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
@@ -85,9 +91,13 @@
                 </ul>
             </nav>
         </aside>
+
+        <!-- Conteúdo da página e mapa de localização -->
         <section class="layout-content">
             <div class="row m-0 h-100">
+                <!-- Conteúdo da pagina: Meus agendamentos e Dados/Agendar -->
                 <div class="col-lg-9 col-md-12">
+                    <!-- Agendar (apenas BARBEIROs e CLIENTEs) -->
                     <div class="row" sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
                         <h3 class="pt-3 pb-3 fw-bold h1-title">Agende aqui o seu serviço</h3>
                         <div class="row">
@@ -103,6 +113,8 @@
                         </div>
                     </div>
                     <hr sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
+
+                    <!-- Listar os agendamentos (todos) -->
                     <div class="row">
                         <h3 class="pt-3 pb-3 fw-bold h1-title">Meus agendamentos</h3>
                         <div>
@@ -128,20 +140,22 @@
                                         <td th:text="${a.servico}"></td>
                                         <td th:text="${a.hora}"></td>
                                         <td th:text="${a.status}"></td>
-                                        <td sec:authorize="hasAnyAuthority('BARBEIRO')" >
+                                        <td sec:authorize="hasAnyAuthority('BARBEIRO')">
                                             <span th:text="${a.cliente.telefone}"></span>
-                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="popover" data-bs-trigger="focus"
-                                                    th:attr="data-bs-content=${'Olá, ' + a.cliente.nome + ', estamos prontos para atender você!'}">
+                                            <button id="whatsapp-button" type="button" class="btn btn-success btn-sm"
+                                                    data-bs-toggle="popover" data-bs-trigger="focus"
+                                                    th:attr="data-bs-content=${'Olá, ' + a.cliente.nome + ', estamos prontos para atender você!'}"
+                                                    onclick="copyPopoverContent(this)">
                                                 <span class="bi bi-whatsapp"></span>
                                             </button>
                                         </td>
+
                                         <td>
                                             <div th:if="${a.status != 'Cancelado' && a.status != 'Confirmado'}">
                                                 <a sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')" class="btn btn-secondary btn-sm"
                                                    th:href="@{/agendamentos/editar/{id}(id=${a.id})}"
                                                    role="button">
-                                   <span class="oi oi-brush" title="Editar"
-                                         aria-hidden="true"></span>
+                                                   <span class="oi oi-brush" title="Editar" aria-hidden="true"></span>
                                                 </a>
 
                                                 <button th:id="${'btn_agendamentos/excluir/' + a.id}"
@@ -155,6 +169,8 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <!-- Modal para cancelar um agendamento -->
                             <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -171,6 +187,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div th:unless="${agendamentos != null and !agendamentos.isEmpty()}">
                                 <div class="alert alert-dark text-center" role="alert">
                                     Você não possui agendamentos.
@@ -179,147 +196,23 @@
                         </div>
                     </div>
                     <hr>
+
+                    <!-- Dados e estatísticas (Apenas BARBEIROs) -->
                     <div class="row" sec:authorize="hasAnyAuthority('BARBEIRO')">
                         <h3 class="pt-3 pb-3 fw-bold h1-title">Dados do barbeiro</h3>
+                        <!-- Gráfico barras -->
                         <div class="col-lg-6 col-md-12 mb-3">
-
                             <div id="container" style="width: 100%; height: 400px; margin: 0 auto"></div>
-
-                            <script
-                                    src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-                            <!-- Latest compiled and minified JavaScript -->
-                            <script
-                                    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-                            <script src="https://code.highcharts.com/highcharts.js"></script>
-                            <script src="https://code.highcharts.com/modules/exporting.js"></script>
-                            <script th:inline="javascript">
-                                $(function(){
-                                    Highcharts.chart('container', {
-                                        chart: {
-                                            type: 'column',
-                                            // Adiciona uma altura proporcional
-                                            height: '60%'
-                                        },
-                                        title: {
-                                            text: 'Análise de Serviços Realizados'
-                                        },
-                                        subtitle: {
-                                            text: 'Comparativo dos Serviços Não Cancelados'
-                                        },
-                                        xAxis: {
-                                            categories: [[${cortesMap.keySet()}]],
-                                            crosshair: true
-                                        },
-                                        yAxis: {
-                                            min: 0,
-                                            max: 10,
-                                            title: {
-                                                text: 'Quantidade [em unidade]'
-                                            }
-                                        },
-                                        tooltip: {
-                                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                                '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                                            footerFormat: '</table>',
-                                            shared: true,
-                                            useHTML: true
-                                        },
-                                        plotOptions: {
-                                            column: {
-                                                pointPadding: 0.2,
-                                                borderWidth: 0
-                                            }
-                                        },
-                                        series: [{
-                                            name: 'Serviço',
-                                            data: [[${cortesMap.values()}]],
-                                            color: '#343434'
-                                        }],
-                                        responsive: {
-                                            rules: [{
-                                                condition: {
-                                                    maxWidth: 500
-                                                },
-                                                chartOptions: {
-                                                    xAxis: {
-                                                        categories: [[${cortesMap.keySet()}]],
-                                                        labels: {
-                                                            style: {
-                                                                fontSize: '10px'
-                                                            }
-                                                        }
-                                                    },
-                                                    yAxis: {
-                                                        labels: {
-                                                            style: {
-                                                                fontSize: '10px'
-                                                            }
-                                                        }
-                                                    },
-                                                    chart: {
-                                                        height: '100%'
-                                                    }
-                                                }
-                                            }]
-                                        }
-                                    });
-                                });
-                            </script>
                         </div>
 
+                        <!-- Gráfico pizza -->
                         <div class="col-lg-6 col-md-12 mb-3">
-                            <script src="https://code.highcharts.com/highcharts.js"></script>
-                            <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-                            <script src="https://code.highcharts.com/modules/exporting.js"></script>
-
                             <div id="container2" style="height: 400px"></div>
-                            <script th:inline="javascript">
-                                Highcharts.chart('container2', {
-                                    chart: {
-                                        type: 'pie',
-                                        options3d: {
-                                            enabled: true,
-                                            alpha: 50,
-                                            beta: 0
-                                        }
-                                    },
-                                    title: {
-                                        text: 'Análise de Agendamentos por Status'
-                                    },
-                                    subtitle: {
-                                        text: 'Distribuição Percentual e Total de Agendamentos'
-                                    },
-                                    tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
-                                    },
-                                    plotOptions: {
-                                        pie: {
-                                            allowPointSelect: true,
-                                            cursor: 'pointer',
-                                            depth: 35,
-                                            dataLabels: {
-                                                enabled: true,
-                                                format: '{point.name}: {point.y} ({point.percentage:.1f}%)'
-                                            }
-                                        }
-                                    },
-                                    series: [{
-                                        type: 'pie',
-                                        name: 'Agendamentos',
-                                        data: [
-                                            { name: 'Confirmado', y: [[${ConfirmadoQtd}]], color: '#03C03C', percentage: [[${Confirmado}]] },
-                                            { name: 'Agendado', y: [[${AgendadoQtd}]], color: '#C0C0C0', percentage: [[${Agendado}]] },
-                                            { name: 'Cancelado', y: [[${CanceladoQtd}]], color: '#CE2029', percentage: [[${Cancelado}]] }
-                                        ]
-                                    }]
-                                });
-                            </script>
                         </div>
-
-
                     </div>
                 </div>
+
+                <!-- Mapa, localização, contato e horário de funcionamento -->
                 <div class="col-lg-3 col-md-12 bg-light">
                     <div class="row">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3959.565626145674!2d-36.35912252422595!3d-7.060214569192404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7aeeeb13947fb49%3A0xcfe659cc04a45798!2sIFPB%20-%20CAMPUS%20AVANCADO%20SOLEDADE!5e0!3m2!1spt-BR!2sbr!4v1723845462004!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -337,14 +230,13 @@
                         <span class="text-muted"><i class="bi bi-clock-fill"></i>&nbsp&nbspSegunda à sexta: 16:00 às 21:30</span>
                     </div>
                 </div>
+
             </div>
         </section>
 
     </div>
 
-
-
-
+    <!-- Scripts -->
     <script
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script
@@ -361,5 +253,145 @@
             integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script th:src="@{/js/navbar.js}"></script>
+
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script th:inline="javascript">
+        $(function(){
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'column',
+                    // Adiciona uma altura proporcional
+                    height: '60%'
+                },
+                title: {
+                    text: 'Análise de Serviços Realizados'
+                },
+                subtitle: {
+                    text: 'Comparativo dos Serviços Não Cancelados'
+                },
+                xAxis: {
+                    categories: [[${cortesMap.keySet()}]],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    max: 10,
+                    title: {
+                        text: 'Quantidade [em unidade]'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: 'Serviço',
+                    data: [[${cortesMap.values()}]],
+                    color: '#343434'
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            xAxis: {
+                                categories: [[${cortesMap.keySet()}]],
+                                labels: {
+                                    style: {
+                                        fontSize: '10px'
+                                    }
+                                }
+                            },
+                            yAxis: {
+                                labels: {
+                                    style: {
+                                        fontSize: '10px'
+                                    }
+                                }
+                            },
+                            chart: {
+                                height: '100%'
+                            }
+                        }
+                    }]
+                }
+            });
+        });
+    </script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script th:inline="javascript">
+        Highcharts.chart('container2', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 50,
+                    beta: 0
+                }
+            },
+            title: {
+                text: 'Análise de Agendamentos por Status'
+            },
+            subtitle: {
+                text: 'Distribuição Percentual e Total de Agendamentos'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y} ({point.percentage:.1f}%)'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Agendamentos',
+                data: [
+                    { name: 'Confirmado', y: [[${ConfirmadoQtd}]], color: '#03C03C', percentage: [[${Confirmado}]] },
+                    { name: 'Agendado', y: [[${AgendadoQtd}]], color: '#C0C0C0', percentage: [[${Agendado}]] },
+                    { name: 'Cancelado', y: [[${CanceladoQtd}]], color: '#CE2029', percentage: [[${Cancelado}]] }
+                ]
+            }]
+        });
+    </script>
+    <script>
+        function copyPopoverContent(button) {
+            // Obtém o conteúdo do popover
+            var popoverContent = button.getAttribute('data-bs-content');
+
+            // Cria um elemento temporário para copiar o texto
+            var tempElement = document.createElement('textarea');
+            tempElement.value = popoverContent;
+            document.body.appendChild(tempElement);
+            tempElement.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempElement);
+        }
+    </script>
 </body>
 </html>

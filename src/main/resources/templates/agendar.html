@@ -19,200 +19,205 @@
     <title>BarberSole App | Agendar</title>
 </head>
 <body>
-<header>
-    <div class="px-3 py-2 bg-dark text-white">
-        <div class="pt-0">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <!-- Header -->
+    <header>
+        <div class="px-3 py-2 bg-dark text-white">
+            <div class="pt-0">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
-                <button type="button"
-                        class="btn btn-dark navbar-toggle pull-left ">
-                    <i class="oi oi-menu "></i>
-                </button>
-
-                <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none pl-3">
-                    <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
-                </a>
-
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                    <li>
-                        <div class="btn bg-dark text-white">
-                            <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
-                        </div>
-                    </li>
-
-                    <li>
-                        <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
-                            <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
-                        </form>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </div>
-</header>
-<div class="layout-main">
-    <aside>
-        <nav class="sidebar sidebar-open navbar-expand-md">
-            <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
-                <li class="nav-item ">
-                    <a class="nav-link " href="/home">
-                        <i class="oi oi-home px-2"></i><span>Home</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
-                    <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/register">
-                        <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/barbeiroLista">
-                        <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    <section class="layout-content">
-        <div class="container">
-            <h3 class="pt-3 pb-3 fw-bold h1-title">Agendar</h3>
-            <div class="py-2" th:if="${sucesso} != null">
-                <div class="alert alert-success" role="alert">
-                    <i class="oi oi-check"></i>
-                    <span>
-                                        <strong th:text="${sucesso}"></strong>
-                                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-            <form th:action="${agendamento.id == null} ? @{/agendamentos/agendarServico} : @{/agendamentos/editar}" th:object="${agendamento}" method="POST">
-
-
-
-                <div th:if="${#fields.hasAnyErrors()}">
-                    <div class="alert alert-danger alert-dismissible fade show"
-                         role="alert">
-                        <div th:each="error : ${#fields.detailedErrors()}">
-                            <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
-                    </div>
-                </div>
-
-                <input type="hidden" id="id" name="id" th:field="*{id}" value="${agendamento.id}"/>
-                <input type="hidden" id="cliente" name="cliente" th:field="*{cliente}" value="${agendamento.cliente}"/>
-                <div class="mb-3">
-                    <label class="mb-2 text-muted" for="servico">Serviço</label>
-                    <select id="servico" type="text" class="form-select" name="servico" required autofocus th:field="*{servico}" >
-                        <option value="">Selecione o serviço</option>
-                        <option value="Corte">Corte</option>
-                        <option value="Barba">Barba</option>
-                        <option value="Corte e barba">Corte e barba</option>
-                    </select>
-                    <div class="invalid-feedback">
-                        o serviço é obrigatório
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="mb-2 text-muted" for="barbeiro">Barbeiro</label>
-                    <select id="barbeiro" class="form-select" name="barbeiro" required autofocus th:field="*{barbeiro}" >
-                        <option value="">Selecione o barbeiro</option>
-                        <option th:each="b : ${barbeiros}" th:value="${b.id}" th:text="${b.nome}"></option>
-                    </select>
-                    <div class="invalid-feedback">
-                        O barbeiro é obrigatório
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label class="mb-2 text-muted" for="data">Selecione a data</label>
-                    <input id="data" type="date" class="form-control" name="data" required th:field="*{data}" >
-                </div>
-
-                <div class="mb-3" id="horarios-container" style="display: none;" data-dropup-auto="false">
-                    <label class="mb-2 text-muted" for="hora">Selecione o horário</label>
-                    <select id="hora" class="form-select" name="hora" required th:field="*{hora}">
-                        <option value="">Selecione o horário</option>
-                    </select>
-                </div>
-
-                <div class="align-items-center d-flex">
-                    <button type="submit" class="btn btn-dark ms-auto">
-                        Agendar
+                    <button type="button"
+                            class="btn btn-dark navbar-toggle pull-left ">
+                        <i class="oi oi-menu "></i>
                     </button>
+
+                    <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none pl-3">
+                        <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
+                    </a>
+
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                        <li>
+                            <div class="btn bg-dark text-white">
+                                <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
+                            </div>
+                        </li>
+
+                        <li>
+                            <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
+                                <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
+                            </form>
+                        </li>
+
+                    </ul>
                 </div>
-            </form>
+            </div>
         </div>
-    </section>
-</div>
+    </header>
 
+    <!-- Layout  -->
+    <div class="layout-main">
+        <!-- Sidebar -->
+        <aside>
+            <nav class="sidebar sidebar-open navbar-expand-md">
+                <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/home">
+                            <i class="oi oi-home px-2"></i><span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
+                        <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/register">
+                            <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/barbeiroLista">
+                            <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
+        <!-- Conteúdo da página: formulário de agendar -->
+        <section class="layout-content">
+            <div class="container">
+                <h3 class="pt-3 pb-3 fw-bold h1-title">Agendar</h3>
 
+                <!-- Alerta de sucesso -->
+                <div class="py-2" th:if="${sucesso} != null">
+                    <div class="alert alert-success" role="alert">
+                        <i class="oi oi-check"></i>
+                        <span>
+                                            <strong th:text="${sucesso}"></strong>
+                                        </span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
 
-<script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
-        integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <!-- Formulário de agendamento -->
+                <form th:action="${agendamento.id == null} ? @{/agendamentos/agendarServico} : @{/agendamentos/editar}" th:object="${agendamento}" method="POST">
+                    <!-- Mensagens de erro -->
+                    <div th:if="${#fields.hasAnyErrors()}">
+                        <div class="alert alert-danger alert-dismissible fade show"
+                             role="alert">
+                            <div th:each="error : ${#fields.detailedErrors()}">
+                                <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                    </div>
 
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
-        integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script th:src="@{/js/navbar.js}"></script>
-<script>
-    $('#data').on('change', function () {
-    let selectedDate = $(this).val();
-    let barbeiroId = $('#barbeiro').val();
+                    <input type="hidden" id="id" name="id" th:field="*{id}" value="${agendamento.id}"/>
+                    <input type="hidden" id="cliente" name="cliente" th:field="*{cliente}" value="${agendamento.cliente}"/>
 
-    if (selectedDate && barbeiroId) {
-        $.ajax({
-            url: '/agendamentos/horarios-disponiveis',
-            type: 'GET',
-            data: {
-                data: selectedDate,
-                barbeiroId: barbeiroId
-            },
-            success: function (horarios) {
-                $('#hora').empty();
+                    <div class="mb-3">
+                        <label class="mb-2 text-muted" for="servico">Serviço</label>
+                        <select id="servico" type="text" class="form-select" name="servico" required autofocus th:field="*{servico}" >
+                            <option value="">Selecione o serviço</option>
+                            <option value="Corte">Corte</option>
+                            <option value="Barba">Barba</option>
+                            <option value="Corte e barba">Corte e barba</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            o serviço é obrigatório
+                        </div>
+                    </div>
 
-                if (horarios.length > 0) {
-                    $('#hora').append('<option value="">Selecione o horário</option>');
-                    $.each(horarios, function (index, horario) {
-                        $('#hora').append('<option value="' + horario + '">' + horario + '</option>');
-                    });
-                    $('#horarios-container').show();
-                } else {
-                    $('#hora').append('<option value="">Sem horários disponíveis</option>');
-                    $('#horarios-container').show();
-                }
+                    <div class="mb-3">
+                        <label class="mb-2 text-muted" for="barbeiro">Barbeiro</label>
+                        <select id="barbeiro" class="form-select" name="barbeiro" required autofocus th:field="*{barbeiro}" >
+                            <option value="">Selecione o barbeiro</option>
+                            <option th:each="b : ${barbeiros}" th:value="${b.id}" th:text="${b.nome}"></option>
+                        </select>
+                        <div class="invalid-feedback">
+                            O barbeiro é obrigatório
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="mb-2 text-muted" for="data">Selecione a data</label>
+                        <input id="data" type="date" class="form-control" name="data" required th:field="*{data}" >
+                    </div>
+
+                    <div class="mb-3" id="horarios-container" style="display: none;" data-dropup-auto="false">
+                        <label class="mb-2 text-muted" for="hora">Selecione o horário</label>
+                        <select id="hora" class="form-select" name="hora" required th:field="*{hora}">
+                            <option value="">Selecione o horário</option>
+                        </select>
+                    </div>
+
+                    <div class="align-items-center d-flex">
+                        <button type="submit" class="btn btn-dark ms-auto">
+                            Agendar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+            integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
+            integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
+            integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:src="@{/js/navbar.js}"></script>
+    <script>
+        $('#data').on('change', function () {
+            let selectedDate = $(this).val();
+            let barbeiroId = $('#barbeiro').val();
+
+            if (selectedDate && barbeiroId) {
+                $.ajax({
+                    url: '/agendamentos/horarios-disponiveis',
+                    type: 'GET',
+                    data: {
+                        data: selectedDate,
+                        barbeiroId: barbeiroId
+                    },
+                    success: function (horarios) {
+                        $('#hora').empty();
+
+                        if (horarios.length > 0) {
+                            $('#hora').append('<option value="">Selecione o horário</option>');
+                            $.each(horarios, function (index, horario) {
+                                $('#hora').append('<option value="' + horario + '">' + horario + '</option>');
+                            });
+                            $('#horarios-container').show();
+                        } else {
+                            $('#hora').append('<option value="">Sem horários disponíveis</option>');
+                            $('#horarios-container').show();
+                        }
+                    }
+                });
+            } else {
+                $('#horarios-container').hide();
             }
         });
-    } else {
-        $('#horarios-container').hide();
-    }
-});
-
-
-</script>
+    </script>
 </body>
 </html>

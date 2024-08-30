@@ -20,49 +20,55 @@
     <title>BarberSole App | Recuperação de senha</title>
 </head>
 <body>
-<section class="h-100">
-    <div class="container h-100">
-        <div class="row justify-content-sm-center h-100">
-            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
-                <div class="text-center my-5">
-                    <img class="mb-4" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="100">
-                </div>
-                <div class="card shadow-lg border-0">
+    <!-- Página de esqueci a senha -->
+    <section class="h-100">
+        <div class="container h-100">
+            <div class="row justify-content-sm-center h-100">
+                <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                    <!-- Logo -->
+                    <div class="text-center my-5">
+                        <img class="mb-4" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="100">
+                    </div>
 
-                    <div class="card-body p-5">
-                        <h1 class="fs-4 card-title fw-bold mb-4 text-center">Recuperação de senha</h1>
-                        <form th:action="@{/sendEmail}" method="POST" class="form-signin was-validated">
-                            <div class="mb-3">
-                                <label class="mb-2 text-muted" for="username">E-mail</label>
-                                <input id="username" type="email" class="form-control" name="username" value="" required autofocus>
-                                <div class="invalid-feedback">
-                                    Email inválido, use seu e-mail cadastrado como login.
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body p-5">
+                            <h1 class="fs-4 card-title fw-bold mb-4 text-center">Recuperação de senha</h1>
+                            <!-- Formulário para recuperação de senha -->
+                            <form th:action="@{/sendEmail}" method="POST" class="form-signin was-validated">
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="username">E-mail</label>
+                                    <input id="username" type="email" class="form-control" name="username" value="" required autofocus>
+                                    <div class="invalid-feedback">
+                                        Email inválido, use seu e-mail cadastrado como login.
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="d-flex align-items-center justify-content-between">
-                                <button type="submit" class="btn btn-dark ms-0">
-                                    Enviar
-                                </button>
-                                <a href="/login" class="text-dark">Voltar</a>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <button type="submit" class="btn btn-dark ms-0">
+                                        Enviar
+                                    </button>
+                                    <a href="/login" class="text-dark">Voltar</a>
+                                </div>
+                            </form>
+                            <br>
+                            <!-- Mensagens de sucesso -->
+                            <div th:if="${success}" class="alert alert-success pt-3" role="alert">
+                                <span th:text="${success}"></span>
                             </div>
-                        </form>
-                        <br>
-                        <div th:if="${success}" class="alert alert-success pt-3" role="alert">
-                            <span th:text="${success}"></span>
-                        </div>
-
-                        <div th:if="${error}" class="alert alert-danger pt-3" role="alert">
-                            <span th:text="${error}"></span>
+                            <!-- Mensagens de erro -->
+                            <div th:if="${error}" class="alert alert-danger pt-3" role="alert">
+                                <span th:text="${error}"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="text-center mt-5 text-muted">
-                    Copyright &copy; 2024 &mdash; BarberSole App
+
+                    <!-- Footer -->
+                    <div class="text-center mt-5 text-muted">
+                        Copyright &copy; 2024 &mdash; BarberSole App
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 </body>
 </html>

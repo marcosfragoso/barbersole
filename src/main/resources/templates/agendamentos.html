@@ -19,168 +19,175 @@
     <title>BarberSole App | Meus agendamentos</title>
 </head>
 <body>
-<header>
-    <div class="px-3 py-2 bg-dark text-white">
-        <div class="pt-0">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <!-- Header -->
+    <header>
+        <div class="px-3 py-2 bg-dark text-white">
+            <div class="pt-0">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
-                <button type="button"
-                        class="btn btn-dark navbar-toggle pull-left ">
-                    <i class="oi oi-menu "></i>
-                </button>
+                    <button type="button"
+                            class="btn btn-dark navbar-toggle pull-left ">
+                        <i class="oi oi-menu "></i>
+                    </button>
 
-                <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none pl-3">
-                    <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
-                </a>
+                    <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none pl-3">
+                        <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
+                    </a>
 
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                    <li>
-                        <div class="btn bg-dark text-white">
-                            <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
-                        </div>
-                    </li>
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                        <li>
+                            <div class="btn bg-dark text-white">
+                                <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
+                            </div>
+                        </li>
 
-                    <li>
-                        <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
-                            <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
-                        </form>
-                    </li>
+                        <li>
+                            <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
+                                <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
+                            </form>
+                        </li>
 
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-</header>
-<div class="layout-main">
-    <aside>
-        <nav class="sidebar sidebar-open navbar-expand-md">
-            <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
-                <li class="nav-item ">
-                    <a class="nav-link " href="/home">
-                        <i class="oi oi-home px-2"></i><span>Home</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
-                    <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/register">
-                        <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/barbeiroLista">
-                        <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    <section class="layout-content">
-        <div class="container">
-            <h3 class="pt-3 pb-3 fw-bold h1-title">Meus agendamentos</h3>
-            <div th:if="${agendamentos != null and !agendamentos.isEmpty()}" class="table-responsive">
-                <table class="table table-hover table-striped table-bordered table-sm">
+    </header>
 
-                    <thead class="table-dark">
-                    <tr>
-                        <th sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')" class="fw-bold" scope="col">Barbeiro</th>
-                        <th sec:authorize="hasAnyAuthority('BARBEIRO')" class="fw-bold" scope="col">Cliente</th>
-                        <th class="fw-bold" scope="col">Data</th>
-                        <th class="fw-bold" scope="col">Serviço</th>
-                        <th class="fw-bold" scope="col">Horário</th>
-                        <th class="fw-bold" scope="col">Status</th>
-                        <th sec:authorize="hasAnyAuthority('BARBEIRO')" class="fw-bold" scope="col">Telefone</th>
-                        <th class="fw-bold" scope="col">Ação</th>
-                    </tr>
-                    </thead>
-                    <tr th:each="a : ${agendamentos}">
-                        <th sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')"  th:text="${a.barbeiro.nome}"></th>
-                        <th sec:authorize="hasAnyAuthority('BARBEIRO')"  th:text="${a.cliente.nome}"></th>
-                        <td th:text="${#temporals.format(a.data, 'dd/MM/yyyy')}"></td>
-                        <td th:text="${a.servico}"></td>
-                        <td  th:text="${a.hora}"></td>
-                        <td  th:text="${a.status}"></td>
-                        <td sec:authorize="hasAnyAuthority('BARBEIRO')" >
-                            <span th:text="${a.cliente.telefone}"></span>
-                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="popover" data-bs-trigger="focus"
-                                    th:attr="data-bs-content=${'Olá, ' + a.cliente.nome + ', estamos prontos para atender você!'}">
-                                <span class="bi bi-whatsapp"></span>
-                            </button>
-                        </td>
-                        <td>
-                            <div th:if="${a.status != 'Cancelado' && a.status != 'Confirmado'}">
-                                <a sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')" class="btn btn-secondary btn-sm"
-                                   th:href="@{/agendamentos/editar/{id}(id=${a.id})}"
-                                   role="button">
-                                   <span class="oi oi-brush" title="Editar"
-                                         aria-hidden="true"></span>
-                                </a>
+    <!-- Layout -->
+    <div class="layout-main">
+        <!-- Sidebar -->
+        <aside>
+            <nav class="sidebar sidebar-open navbar-expand-md">
+                <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/home">
+                            <i class="oi oi-home px-2"></i><span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
+                        <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/register">
+                            <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/barbeiroLista">
+                            <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
 
-                                <button th:id="${'btn_agendamentos/excluir/' + a.id}"
-                                        type="button" class="btn btn-danger btn-sm"
-                                        data-bs-toggle="modal" data-bs-target="#myModal">
-                                    <span class="oi oi-circle-x" title="Exclusão desabilitada" aria-hidden="true"></span>
+        <!-- Conteúdo da página: Agendamentos -->
+        <section class="layout-content">
+            <div class="container">
+                <h3 class="pt-3 pb-3 fw-bold h1-title">Meus agendamentos</h3>
+                <div th:if="${agendamentos != null and !agendamentos.isEmpty()}" class="table-responsive">
+                    <table class="table table-hover table-striped table-bordered table-sm">
+
+                        <thead class="table-dark">
+                        <tr>
+                            <th sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')" class="fw-bold" scope="col">Barbeiro</th>
+                            <th sec:authorize="hasAnyAuthority('BARBEIRO')" class="fw-bold" scope="col">Cliente</th>
+                            <th class="fw-bold" scope="col">Data</th>
+                            <th class="fw-bold" scope="col">Serviço</th>
+                            <th class="fw-bold" scope="col">Horário</th>
+                            <th class="fw-bold" scope="col">Status</th>
+                            <th sec:authorize="hasAnyAuthority('BARBEIRO')" class="fw-bold" scope="col">Telefone</th>
+                            <th class="fw-bold" scope="col">Ação</th>
+                        </tr>
+                        </thead>
+                        <tr th:each="a : ${agendamentos}">
+                            <th sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')"  th:text="${a.barbeiro.nome}"></th>
+                            <th sec:authorize="hasAnyAuthority('BARBEIRO')"  th:text="${a.cliente.nome}"></th>
+                            <td th:text="${#temporals.format(a.data, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${a.servico}"></td>
+                            <td  th:text="${a.hora}"></td>
+                            <td  th:text="${a.status}"></td>
+                            <td sec:authorize="hasAnyAuthority('BARBEIRO')" >
+                                <span th:text="${a.cliente.telefone}"></span>
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="popover" data-bs-trigger="focus"
+                                        th:attr="data-bs-content=${'Olá, ' + a.cliente.nome + ', estamos prontos para atender você!'}">
+                                    <span class="bi bi-whatsapp"></span>
                                 </button>
+                            </td>
+                            <td>
+                                <div th:if="${a.status != 'Cancelado' && a.status != 'Confirmado'}">
+                                    <a sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')" class="btn btn-secondary btn-sm"
+                                       th:href="@{/agendamentos/editar/{id}(id=${a.id})}"
+                                       role="button">
+                                       <span class="oi oi-brush" title="Editar"
+                                             aria-hidden="true"></span>
+                                    </a>
+
+                                    <button th:id="${'btn_agendamentos/excluir/' + a.id}"
+                                            type="button" class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal" data-bs-target="#myModal">
+                                        <span class="oi oi-circle-x" title="Exclusão desabilitada" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal para cancelar um agendamento -->
+                <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Atenção</h4>
                             </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Atenção</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>Tem certeza que deseja cancelar o agendamento?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
+                            <div class="modal-body">
+                                <p>Tem certeza que deseja cancelar o agendamento?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div th:unless="${agendamentos != null and !agendamentos.isEmpty()}">
-                <div class="alert alert-dark text-center" role="alert">
-                    Você não possui agendamentos.
+
+                <div th:unless="${agendamentos != null and !agendamentos.isEmpty()}">
+                    <div class="alert alert-dark text-center" role="alert">
+                        Você não possui agendamentos.
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 
+    <!-- Scripts -->
+    <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+            integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
+            integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
-
-<script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
-        integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
-        integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script th:src="@{/js/navbar.js}"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
+            integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:src="@{/js/navbar.js}"></script>
 
 </body>
 </html>

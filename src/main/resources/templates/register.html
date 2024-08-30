@@ -19,16 +19,20 @@
     <title>BarberSole App | Register</title>
 </head>
 <body>
+    <!-- Página de registro de clientes -->
     <section class="h-100">
         <div class="container h-100">
             <div class="row justify-content-sm-center h-100">
                 <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                    <!-- Logo -->
                     <div class="text-center my-5">
                         <img class="mb-4" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="100">
                     </div>
+
                     <div class="card shadow-lg border-0">
                         <div class="card-body p-5">
                             <h1 class="fs-4 card-title fw-bold mb-4 text-center">Registre-se</h1>
+                            <!-- Mensagens de sucesso -->
                             <div class="py-2" th:if="${sucesso} != null">
                                 <div class="alert alert-success" role="alert">
                                     <i class="oi oi-check"></i>
@@ -38,6 +42,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             </div>
+                            <!-- Mensagens de erro -->
                             <div th:if="${error}">
                                 <div class="alert alert-danger alert-dismissible fade show"
                                      role="alert">
@@ -46,11 +51,9 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <!-- Formulário para cadastrar cliente -->
                             <form th:action="@{/cadastrar}" th:object="${usuario}" method="POST">
-
-
-
+                                <!-- Mensagens de erro -->
                                 <div th:if="${#fields.hasAnyErrors()}">
                                     <div class="alert alert-danger alert-dismissible fade show"
                                          role="alert">
@@ -61,7 +64,6 @@
                                                 aria-label="Close"></button>
                                     </div>
                                 </div>
-
 
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="nome">Nome</label>
@@ -91,7 +93,6 @@
                                     <input id="senha" type="password" class="form-control" name="senha" required th:field="*{senha}" th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'">
                                 </div>
 
-
                                 <div class="align-items-center d-flex">
                                     <button type="submit" class="btn btn-primary ms-auto">
                                         Registrar
@@ -99,6 +100,7 @@
                                 </div>
                             </form>
                         </div>
+
                         <div class="card-footer py-3 border-0 bg-dark text-white">
                             <div class="text-center">
                                 Já tem uma conta? <a href="/login" class="text-dark bg-dark text-white">Login</a>
@@ -106,8 +108,7 @@
                         </div>
                     </div>
 
-
-
+                    <!-- Footer -->
                     <div class="text-center mt-5 mb-5 text-muted">
                         Copyright &copy; 2024 &mdash; BarberSole App
                     </div>

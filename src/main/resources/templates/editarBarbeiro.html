@@ -19,198 +19,209 @@
     <title>BarberSole App | Editar perfil</title>
 </head>
 <body>
-<header>
-    <div class="px-3 py-2 bg-dark text-white">
-        <div class="pt-0">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <!-- Header -->
+    <header>
+        <div class="px-3 py-2 bg-dark text-white">
+            <div class="pt-0">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
-                <button type="button"
-                        class="btn btn-dark navbar-toggle pull-left ">
-                    <i class="oi oi-menu "></i>
-                </button>
+                    <button type="button"
+                            class="btn btn-dark navbar-toggle pull-left ">
+                        <i class="oi oi-menu "></i>
+                    </button>
 
-                <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none">
-                    <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
-                </a>
+                    <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none">
+                        <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
+                    </a>
 
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                    <li>
-                        <div class="btn bg-dark text-white">
-                            <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
-                        </div>
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                        <li>
+                            <div class="btn bg-dark text-white">
+                                <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
+                            </div>
+                        </li>
+
+                        <li>
+                            <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
+                                <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
+                            </form>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Layout -->
+    <div class="layout-main">
+        <!-- Sidebar -->
+        <aside>
+            <nav class="sidebar sidebar-open navbar-expand-md">
+                <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/home">
+                            <i class="oi oi-home px-2"></i><span>Home</span>
+                        </a>
                     </li>
-
-                    <li>
-                        <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
-                            <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
-                        </form>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
+                        <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
+                        </a>
                     </li>
-
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/register">
+                            <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/barbeiroLista">
+                            <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
+                        </a>
+                    </li>
                 </ul>
+            </nav>
+        </aside>
+        <!-- Conteúdo da página: Editar barbeiro -->
+        <section class="layout-content">
+            <div class="container">
+                <h3 class="pt-3 pb-3 fw-bold h1-title">Editar perfil</h3>
+                <!-- Mensagens de sucesso -->
+                <div class="py-2" th:if="${sucesso} != null">
+                    <div class="alert alert-success" role="alert">
+                        <i class="oi oi-check"></i>
+                        <span>
+                                            <strong th:text="${sucesso}"></strong>
+                                        </span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                <!-- Mensagens de erro -->
+                <div th:if="${error}">
+                    <div class="alert alert-danger alert-dismissible fade show"
+                         role="alert">
+                        <div>
+                            <i class="oi oi-warning"></i> <span th:text="${error}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="shadow-lg p-4">
+                    <!-- Form de editar barbeiro -->
+                    <form class="pb-3" th:object="${usuario}" method="post" th:action="@{/usuarios/editarBarbeiro}">
+                        <!-- Mensagens de erro -->
+                        <div th:if="${#fields.hasAnyErrors()}">
+                            <div class="alert alert-danger alert-dismissible fade show"
+                                 role="alert">
+                                <div th:each="error : ${#fields.detailedErrors()}">
+                                    <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="username" class="col-sm-2 col-form-label text-muted">E-mail</label>
+                            <div class="col-sm-6">
+                                <input class="form-control bg-light" id="username" th:field="*{username}" aria-readonly="true"></input>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nome" class="col-sm-2 col-form-label text-muted">Nome</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="nome" placeholder="Nome" autofocus="autofocus" th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" />
+                                <div class="invalid-feedback">
+                                    O nome é obrigatório
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="telefone" class="col-sm-2 col-form-label text-muted">Telefone</label>
+                            <div class="col-sm-6">
+                                <input type="tel" class="form-control" id="telefone" placeholder="Telefone" autofocus="autofocus" th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="data_nasc" class="col-sm-2 col-form-label text-muted">Data de nascimento</label>
+                            <div class="col-sm-6">
+                                <span class="form-control bg-light" id="data_nasc" th:text="*{dataNasc}" aria-readonly="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="data_cad" class="col-sm-2 col-form-label text-muted">Data de cadastro</label>
+                            <div class="col-sm-6">
+                                <span class="form-control bg-light" id="data_cad" th:text="*{dataCad}" aria-readonly="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="status" class="col-sm-2 col-form-label text-muted">Status</label>
+                            <div class="col-sm-6">
+                                <span class="form-control bg-light" id="status" th:text="*{status}" aria-readonly="true"></span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-1 ">Salvar</button>
+                    </form>
+                    <div th:switch="${usuario.status}">
+                        <button th:case="'Ativo'" th:id="${'btn_usuarios/excluirBarbeiro/' + usuario.id}" type="button" class="pt-2 btn btn-danger btn"
+                                data-bs-toggle="modal" data-bs-target="#myModal">
+                            <span title="Exclusão desabilitada" aria-hidden="true">Excluir conta</span>
+                        </button>
+                        <button th:case="'Inativo'" th:id="${'btn_usuarios/ativarBarbeiro/' + usuario.id}" type="button" class="pt-2 btn btn-success btn"
+                                data-bs-toggle="modal" data-bs-target="#myModal">
+                            <span title="Exclusão desabilitada" aria-hidden="true">Ativar conta</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal de confirmação de exclusão -->
+                <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Atenção</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Tem certeza disso?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     </div>
-</header>
-<div class="layout-main">
-    <aside>
-        <nav class="sidebar sidebar-open navbar-expand-md">
-            <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
-                <li class="nav-item ">
-                    <a class="nav-link " href="/home">
-                        <i class="oi oi-home px-2"></i><span>Home</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')">
-                    <a class="nav-link " href="/agendamentos/agendar"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/register">
-                        <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/barbeiroLista">
-                        <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    <section class="layout-content">
-        <div class="container">
-            <h3 class="pt-3 pb-3 fw-bold h1-title">Editar perfil</h3>
-            <div class="py-2" th:if="${sucesso} != null">
-                <div class="alert alert-success" role="alert">
-                    <i class="oi oi-check"></i>
-                    <span>
-                                        <strong th:text="${sucesso}"></strong>
-                                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-            <div th:if="${error}">
-                <div class="alert alert-danger alert-dismissible fade show"
-                     role="alert">
-                    <div>
-                        <i class="oi oi-warning"></i> <span th:text="${error}"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="shadow-lg p-4">
-                <form class="pb-3" th:object="${usuario}" method="post" th:action="@{/usuarios/editarBarbeiro}">
 
-                    <div th:if="${#fields.hasAnyErrors()}">
-                        <div class="alert alert-danger alert-dismissible fade show"
-                             role="alert">
-                            <div th:each="error : ${#fields.detailedErrors()}">
-                                <i class="oi oi-warning"></i> <span th:text="${error.message}"></span>
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                    aria-label="Close"></button>
-                        </div>
-                    </div>
+    <!-- Scripts -->
+    <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+            integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
+            integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-                    <div class="form-group row">
-                        <label for="username" class="col-sm-2 col-form-label text-muted">E-mail</label>
-                        <div class="col-sm-6">
-                            <input class="form-control bg-light" id="username" th:field="*{username}" aria-readonly="true"></input>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="nome" class="col-sm-2 col-form-label text-muted">Nome</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="nome" placeholder="Nome" autofocus="autofocus" th:field="*{nome}" th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'" />
-                            <div class="invalid-feedback">
-                                O nome é obrigatório
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="telefone" class="col-sm-2 col-form-label text-muted">Telefone</label>
-                        <div class="col-sm-6">
-                            <input type="tel" class="form-control" id="telefone" placeholder="Telefone" autofocus="autofocus" th:field="*{telefone}" th:classappend="${#fields.hasErrors('telefone')} ? 'is-invalid'" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="data_nasc" class="col-sm-2 col-form-label text-muted">Data de nascimento</label>
-                        <div class="col-sm-6">
-                            <span class="form-control bg-light" id="data_nasc" th:text="*{dataNasc}" aria-readonly="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="data_cad" class="col-sm-2 col-form-label text-muted">Data de cadastro</label>
-                        <div class="col-sm-6">
-                            <span class="form-control bg-light" id="data_cad" th:text="*{dataCad}" aria-readonly="true"></span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="status" class="col-sm-2 col-form-label text-muted">Status</label>
-                        <div class="col-sm-6">
-                            <span class="form-control bg-light" id="status" th:text="*{status}" aria-readonly="true"></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-1 ">Salvar</button>
-
-                </form>
-                <div th:switch="${usuario.status}">
-                    <button th:case="'Ativo'" th:id="${'btn_usuarios/excluirBarbeiro/' + usuario.id}" type="button" class="pt-2 btn btn-danger btn"
-                            data-bs-toggle="modal" data-bs-target="#myModal">
-                        <span title="Exclusão desabilitada" aria-hidden="true">Excluir conta</span>
-                    </button>
-                    <button th:case="'Inativo'" th:id="${'btn_usuarios/ativarBarbeiro/' + usuario.id}" type="button" class="pt-2 btn btn-success btn"
-                            data-bs-toggle="modal" data-bs-target="#myModal">
-                        <span title="Exclusão desabilitada" aria-hidden="true">Ativar conta</span>
-                    </button>
-                </div>
-            </div>
-
-
-            <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Atenção</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>Tem certeza disso?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button id="ok_confirm" type="button" class="btn btn-primary">Ok</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-
-
-
-<script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
-        integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
-        integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script th:src="@{/js/navbar.js}"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
+            integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:src="@{/js/navbar.js}"></script>
 </body>
 </html>

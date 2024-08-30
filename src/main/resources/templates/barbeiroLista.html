@@ -19,141 +19,151 @@
     <title>BarberSole App | Barbeiros</title>
 </head>
 <body>
-<header>
-    <div class="px-3 py-2 bg-dark text-white">
-        <div class="pt-0">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <!-- Header -->
+    <header>
+        <div class="px-3 py-2 bg-dark text-white">
+            <div class="pt-0">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
-                <button type="button"
-                        class="btn btn-dark navbar-toggle pull-left ">
-                    <i class="oi oi-menu "></i>
-                </button>
+                    <button type="button"
+                            class="btn btn-dark navbar-toggle pull-left ">
+                        <i class="oi oi-menu "></i>
+                    </button>
 
-                <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none">
-                    <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
-                </a>
+                    <a href="/home" class="d-flex align-items-center my-2 me-lg-auto text-white text-decoration-none">
+                        <img class="rounded-circle bg-white align-items-center" th:src="@{/images/logo.png}" alt="Logo do BarberSole App" width="40" height="32">
+                    </a>
 
-                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                    <li>
-                        <div class="btn bg-dark text-white">
-                            <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
-                        </div>
-                    </li>
+                    <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                        <li>
+                            <div class="btn bg-dark text-white">
+                                <i class="bi bi-person-fill px-2"></i><span sec:authentication="name"></span>
+                            </div>
+                        </li>
 
-                    <li>
-                        <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
-                            <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
-                        </form>
-                    </li>
+                        <li>
+                            <form th:action="@{/logout}" sec:authorize="isAuthenticated" method="post">
+                                <button class="btn bg-dark text-white" type="submit"><i class="bi bi-box-arrow-left"></i> Sair</button>
+                            </form>
+                        </li>
 
-                </ul>
-            </div>
-        </div>
-    </div>
-</header>
-<div class="layout-main">
-    <aside>
-        <nav class="sidebar sidebar-open navbar-expand-md">
-            <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
-                <li class="nav-item ">
-                    <a class="nav-link " href="/home">
-                        <i class="oi oi-home px-2"></i><span>Home</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/agendamentos/agendar" sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
-                    </a>
-                </li>
-                <li class="nav-item ">
-                    <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/register">
-                        <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
-                    </a>
-                </li>
-                <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
-                    <a class="nav-link " href="/barbeiros/barbeiroLista">
-                        <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-    <section class="layout-content">
-        <div class="container">
-            <h3 class="pt-3 pb-3 fw-bold h1-title">Barbeiros</h3>
-            <div class="py-2" th:if="${sucesso} != null">
-                <div class="alert alert-success" role="alert">
-                    <i class="oi oi-check"></i>
-                    <span>
-                                        <strong th:text="${sucesso}"></strong>
-                                    </span>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </ul>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover table-striped table-bordered table-sm">
+        </div>
+    </header>
 
-                    <thead class="table-dark">
-                        <tr>
-                            <th class="text-center fw-bold" scope="col">Código</th>
-                            <th class="text-center fw-bold" scope="col">Nome</th>
-                            <th class="text-center fw-bold" scope="col">Status</th>
-                            <th class="text-center fw-bold" scope="col">Data de cadastro</th>
-                            <th class="text-center fw-bold" scope="col">Ação</th>
-                        </tr>
-                    </thead>
-                    <tr th:each="b : ${barbeiros}">
-                        <th class="text-center fw-bold" th:text="${b.id}"></th>
-                        <td th:text="${b.nome}"></td>
-                        <td class="text-center" th:text="${b.status}"></td>
-                        <td class="text-end" th:text="${b.dataCad}"></td>
-                        <td class="text-center" colspan="2"><a class="btn btn-secondary btn-sm"
-                                           th:href="@{/usuarios/editar/{id}(id=${b.id})}"
-                                           role="button">
-                               <span class="bi bi-pencil-square" title="Editar"
-                                     aria-hidden="true"></span>
+    <!-- Layout -->
+    <div class="layout-main">
+        <!-- Sidebar -->
+        <aside>
+            <nav class="sidebar sidebar-open navbar-expand-md">
+                <ul class="nav nav-pills " sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE', 'BARBEIRO')">
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/home">
+                            <i class="oi oi-home px-2"></i><span>Home</span>
                         </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div th:if="${error}">
-                <div class="alert alert-danger alert-dismissible fade show"
-                     role="alert">
-                    <div>
-                        <i class="oi oi-warning"></i> <span th:text="${error}"></span>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/agendamentos/agendar" sec:authorize="hasAnyAuthority('ADMIN', 'CLIENTE')"><i class="bi bi-plus-circle px-2"></i><span>Agendar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/agendamentos/"><i class="bi bi-calendar-event px-2"></i><span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/usuarios/editar"><i class="bi bi-gear px-2"></i><span>Meu perfil</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/register">
+                            <i class="bi bi-person-fill-add px-2"></i><span>Registrar barbeiro</span>
+                        </a>
+                    </li>
+                    <li class="nav-item " sec:authorize="hasAnyAuthority('ADMIN')">
+                        <a class="nav-link " href="/barbeiros/barbeiroLista">
+                            <i class="bi bi-list-stars px-2"></i><span>Listar barbeiros</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Conteúdo da página: Listagem de barbeiros -->
+        <section class="layout-content">
+            <div class="container">
+                <h3 class="pt-3 pb-3 fw-bold h1-title">Barbeiros</h3>
+
+                <!-- Alertas de sucesso -->
+                <div class="py-2" th:if="${sucesso} != null">
+                    <div class="alert alert-success" role="alert">
+                        <i class="oi oi-check"></i>
+                        <span>
+                                            <strong th:text="${sucesso}"></strong>
+                                        </span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <!-- Listagem dos barbeiros -->
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped table-bordered table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-center fw-bold" scope="col">Código</th>
+                                <th class="text-center fw-bold" scope="col">Nome</th>
+                                <th class="text-center fw-bold" scope="col">Status</th>
+                                <th class="text-center fw-bold" scope="col">Data de cadastro</th>
+                                <th class="text-center fw-bold" scope="col">Ação</th>
+                            </tr>
+                        </thead>
+                        <tr th:each="b : ${barbeiros}">
+                            <th class="text-center fw-bold" th:text="${b.id}"></th>
+                            <td th:text="${b.nome}"></td>
+                            <td class="text-center" th:text="${b.status}"></td>
+                            <td class="text-end" th:text="${b.dataCad}"></td>
+                            <td class="text-center" colspan="2"><a class="btn btn-secondary btn-sm"
+                                               th:href="@{/usuarios/editar/{id}(id=${b.id})}"
+                                               role="button">
+                                   <span class="bi bi-pencil-square" title="Editar"
+                                         aria-hidden="true"></span>
+                            </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Alertas de erros -->
+                <div th:if="${error}">
+                    <div class="alert alert-danger alert-dismissible fade show"
+                         role="alert">
+                        <div>
+                            <i class="oi oi-warning"></i> <span th:text="${error}"></span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 
+    <!-- Scripts -->
+    <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+            integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
+            integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
-<script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/0.9.0/jquery.mask.min.js"
-        integrity="sha512-oJCa6FS2+zO3EitUSj+xeiEN9UTr+AjqlBZO58OPadb2RfqwxHpjTU8ckIC8F4nKvom7iru2s8Jwdo+Z8zm0Vg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
-        integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script th:src="@{/js/navbar.js}"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js"
+            integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:src="@{/js/navbar.js}"></script>
 </body>
 </html>
