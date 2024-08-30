@@ -256,142 +256,145 @@
 
     <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script
-            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script th:inline="javascript">
-        $(function(){
-            Highcharts.chart('container', {
-                chart: {
-                    type: 'column',
-                    // Adiciona uma altura proporcional
-                    height: '60%'
-                },
-                title: {
-                    text: 'Análise de Serviços Realizados'
-                },
-                subtitle: {
-                    text: 'Comparativo dos Serviços Não Cancelados'
-                },
-                xAxis: {
-                    categories: [[${cortesMap.keySet()}]],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
-                    max: 10,
+    <!-- Verifica se o usuário logado é um barbeiro -->
+    <div sec:authorize="hasAnyAuthority('BARBEIRO')">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script th:inline="javascript">
+            $(function(){
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column',
+                        // Adiciona uma altura proporcional
+                        height: '60%'
+                    },
                     title: {
-                        text: 'Quantidade [em unidade]'
+                        text: 'Análise de Serviços Realizados'
+                    },
+                    subtitle: {
+                        text: 'Comparativo dos Serviços Não Cancelados'
+                    },
+                    xAxis: {
+                        categories: [[${cortesMap.keySet()}]],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        max: 10,
+                        title: {
+                            text: 'Quantidade [em unidade]'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Serviço',
+                        data: [[${cortesMap.values()}]],
+                        color: '#343434'
+                    }],
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxWidth: 500
+                            },
+                            chartOptions: {
+                                xAxis: {
+                                    categories: [[${cortesMap.keySet()}]],
+                                    labels: {
+                                        style: {
+                                            fontSize: '10px'
+                                        }
+                                    }
+                                },
+                                yAxis: {
+                                    labels: {
+                                        style: {
+                                            fontSize: '10px'
+                                        }
+                                    }
+                                },
+                                chart: {
+                                    height: '100%'
+                                }
+                            }
+                        }]
+                    }
+                });
+            });
+        </script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script th:inline="javascript">
+            Highcharts.chart('container2', {
+                chart: {
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 50,
+                        beta: 0
                     }
                 },
+                title: {
+                    text: 'Análise de Agendamentos por Status'
+                },
+                subtitle: {
+                    text: 'Distribuição Percentual e Total de Agendamentos'
+                },
                 tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
+                    pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
                 },
                 plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.name}: {point.y} ({point.percentage:.1f}%)'
+                        }
                     }
                 },
                 series: [{
-                    name: 'Serviço',
-                    data: [[${cortesMap.values()}]],
-                    color: '#343434'
-                }],
-                responsive: {
-                    rules: [{
-                        condition: {
-                            maxWidth: 500
-                        },
-                        chartOptions: {
-                            xAxis: {
-                                categories: [[${cortesMap.keySet()}]],
-                                labels: {
-                                    style: {
-                                        fontSize: '10px'
-                                    }
-                                }
-                            },
-                            yAxis: {
-                                labels: {
-                                    style: {
-                                        fontSize: '10px'
-                                    }
-                                }
-                            },
-                            chart: {
-                                height: '100%'
-                            }
-                        }
-                    }]
-                }
+                    type: 'pie',
+                    name: 'Agendamentos',
+                    data: [
+                        { name: 'Confirmado', y: [[${ConfirmadoQtd}]], color: '#03C03C', percentage: [[${Confirmado}]] },
+                        { name: 'Agendado', y: [[${AgendadoQtd}]], color: '#C0C0C0', percentage: [[${Agendado}]] },
+                        { name: 'Cancelado', y: [[${CanceladoQtd}]], color: '#CE2029', percentage: [[${Cancelado}]] }
+                    ]
+                }]
             });
-        });
-    </script>
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script th:inline="javascript">
-        Highcharts.chart('container2', {
-            chart: {
-                type: 'pie',
-                options3d: {
-                    enabled: true,
-                    alpha: 50,
-                    beta: 0
-                }
-            },
-            title: {
-                text: 'Análise de Agendamentos por Status'
-            },
-            subtitle: {
-                text: 'Distribuição Percentual e Total de Agendamentos'
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    depth: 35,
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.name}: {point.y} ({point.percentage:.1f}%)'
-                    }
-                }
-            },
-            series: [{
-                type: 'pie',
-                name: 'Agendamentos',
-                data: [
-                    { name: 'Confirmado', y: [[${ConfirmadoQtd}]], color: '#03C03C', percentage: [[${Confirmado}]] },
-                    { name: 'Agendado', y: [[${AgendadoQtd}]], color: '#C0C0C0', percentage: [[${Agendado}]] },
-                    { name: 'Cancelado', y: [[${CanceladoQtd}]], color: '#CE2029', percentage: [[${Cancelado}]] }
-                ]
-            }]
-        });
-    </script>
-    <script>
-        function copyPopoverContent(button) {
-            // Obtém o conteúdo do popover
-            var popoverContent = button.getAttribute('data-bs-content');
+        </script>
+        <script>
+            function copyPopoverContent(button) {
+                // Obtém o conteúdo do popover
+                var popoverContent = button.getAttribute('data-bs-content');
 
-            // Cria um elemento temporário para copiar o texto
-            var tempElement = document.createElement('textarea');
-            tempElement.value = popoverContent;
-            document.body.appendChild(tempElement);
-            tempElement.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempElement);
-        }
-    </script>
+                // Cria um elemento temporário para copiar o texto
+                var tempElement = document.createElement('textarea');
+                tempElement.value = popoverContent;
+                document.body.appendChild(tempElement);
+                tempElement.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempElement);
+            }
+        </script>
+    </div>
+
 </body>
 </html>

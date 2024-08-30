@@ -88,11 +88,12 @@ public class HomeController {
                 .anyMatch(perfil -> "BARBEIRO".equals(perfil.getNome()));
 
         List<Agendamento> agendamentos;
+        Map<String, Long> cortesMap = new LinkedHashMap<>();
 
         if (isBarbeiro) {
             agendamentos = agendamentoService.buscarAgendamentosPorBarbeiro(usuario);
 
-            Map<String, Long> cortesMap = new LinkedHashMap<>();
+
             cortesMap.put("Corte", agendamentoService.getQuantidadeByServico("Corte", usuario.getId()));
             cortesMap.put("Barba", agendamentoService.getQuantidadeByServico("Barba", usuario.getId()));
             cortesMap.put("Corte e barba", agendamentoService.getQuantidadeByServico("Corte e barba", usuario.getId()));
