@@ -6,6 +6,7 @@ import com.edu.ifpb.barbersole.repository.PerfilRepository;
 import com.edu.ifpb.barbersole.repository.UsuarioRepository;
 
 import jakarta.persistence.EntityExistsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserService implements UserDetailsService {
 
@@ -33,18 +35,25 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = buscaPorUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário inexistente!"));
 
-        if (!usuario.getStatus().equals("Ativo")) {
-            throw new DisabledException("Usuário inativo!");
+        try {
+            Usuario usuario = buscaPorUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário inexistente!"));
+
+            if (!usuario.getStatus().equals("Ativo")) {
+                throw new DisabledException("Usuário inativo!");
+            }
+
+            User userSpring = new User(
+                    usuario.getUsername(),
+                    usuario.getSenha(),
+                    AuthorityUtils.createAuthorityList(getAuthorities(usuario.getPerfis()))
+            );
+            log.info("Usuário autenticado com sucesso. Username: {}.", username);
+            return userSpring;
+        } catch (UsernameNotFoundException e) {
+            log.error("Usuário não existente. Username: {}.", username);
+            return null;
         }
-
-        User userSpring = new User(
-                usuario.getUsername(),
-                usuario.getSenha(),
-                AuthorityUtils.createAuthorityList(getAuthorities(usuario.getPerfis()))
-        );
-        return userSpring;
     }
 
     private String[] getAuthorities(List<Perfil> perfis) {
@@ -62,15 +71,22 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = false)
     public void salvarUsuario(Usuario usuario) {
-        String crypt = new BCryptPasswordEncoder().encode(usuario.getSenha());
-        usuario.setDataCad(LocalDate.now());
-        usuario.setSenha(crypt);
-        usuario.setPerfis(perfilRepository.findAllById(2L));
-        usuario.setStatus("Ativo");
-        if (usuarioRepository.findByUsername(usuario.getUsername()).isPresent()) {
-            throw new EntityExistsException();
+        try {
+            String crypt = new BCryptPasswordEncoder().encode(usuario.getSenha());
+            usuario.setDataCad(LocalDate.now());
+            usuario.setSenha(crypt);
+            usuario.setPerfis(perfilRepository.findAllById(2L));
+            usuario.setStatus("Ativo");
+            if (usuarioRepository.findByUsername(usuario.getUsername()).isPresent()) {
+                throw new EntityExistsException();
+            }
+            usuarioRepository.save(usuario);
+        } catch (EntityExistsException e) {
+            log.error("O usuário já existe. Usuário: {}", usuario.getUsername());
+        } catch (Exception ex) {
+            log.error("Erro ao cadastrar o usuário ", ex);
         }
-        usuarioRepository.save(usuario);
+
     }
 
     @Transactional(readOnly = false)

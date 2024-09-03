@@ -3,7 +3,7 @@ from playwright.sync_api import sync_playwright
 import time
 
 def ler_cortes():
-    abrindo_csv = open('D:\\Users\\Marcos\\Documents\\barbersole\\src\\main\\resources\\playwright\\cortes.csv', 'r')
+    abrindo_csv = open('C:\\Users\\Marcos\\Documents\\web2-if\\barbersole\\src\\main\\resources\\playwright\\cortes.csv', 'r')
     cortes = csv.reader(abrindo_csv, delimiter=';')
     cortes_lista = []
     

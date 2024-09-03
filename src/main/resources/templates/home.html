@@ -157,7 +157,7 @@
                                             <span th:text="${a.cliente.telefone}"></span>
                                             <button id="whatsapp-button" type="button" class="btn btn-success btn-sm"
                                                     data-bs-toggle="popover" data-bs-trigger="focus"
-                                                    th:attr="data-bs-content=${'Olá, ' + a.cliente.nome + ', estamos prontos para atender você!'}"
+                                                    th:attr="data-bs-content=${'Olá, ' + a.cliente.nome + ', estamos passando para lembrar do serviço ' + a.servico + ' na data ' + a.data + ' e horário ' + a.hora + '. Posso confirmar?'}"
                                                     onclick="copyPopoverContent(this)">
                                                 <span class="bi bi-whatsapp"></span>
                                             </button>
